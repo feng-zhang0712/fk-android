@@ -1,5 +1,10 @@
 # fk-android
 
+[![Android](https://img.shields.io/badge/Android-minSdk%2024-green.svg)](https://developer.android.com/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.1-purple.svg)](https://kotlinlang.org/)
+[![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-blue.svg)](https://developer.android.com/jetpack/compose)
+[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](LICENSE)
+
 Android component libraries corresponding to iOS [FKKit](../FKKit) / [FKBusinessKit](../FKBusinessKit).
 
 | Module | Maven artifact | Maps to (iOS) | Role |
@@ -98,6 +103,48 @@ Before adding components, read **[docs/component-porting-guide.md](docs/componen
 - Prefer **Jetpack + Material 3** for commodity controls; only wrap what multi-app projects need for consistency.
 - Do **not** port iOS `Base` view-controller shells; use Compose Navigation / app scaffolds in host apps.
 - English only for public APIs, comments, and docs (aligned with FKKit).
+
+
+## Contributing
+
+Pull requests are welcome. Open PRs against **`develop`**, keep changes focused, and ensure library modules assemble successfully.
+
+## Support
+
+File bug reports and feature requests in [GitHub Issues](https://github.com/feng-zhang0712/fk-android/issues).
+
+## Security
+
+Please report security vulnerabilities through [GitHub private security advisories](https://github.com/feng-zhang0712/fk-android/security/advisories/new) instead of public issues.
+
+## Branching & Collaboration (Recommended)
+
+- Use **`develop`** as the integration branch.
+- Create feature branches from `develop` (for example: `feature/network`, `feature/theme`).
+- Keep **`main`** aligned with stable / release snapshots.
+- Keep commits focused and use clear conventional-style messages.
+- Follow this commit format:
+  - `<type>(<scope>): <subject>`
+  - Example: `feat(network): add OkHttp client façade with interceptors`
+- Recommended commit types:
+  - `feat`: new feature
+  - `fix`: bug fix
+  - `refactor`: internal refactor without behavior change
+  - `perf`: performance improvement
+  - `docs`: documentation updates
+  - `test`: tests added or updated
+  - `build`: build/dependency/tooling changes
+  - `chore`: maintenance tasks
+- Commit message rules:
+  - Use present tense and imperative mood (`add`, `fix`, `refactor`).
+  - Keep the subject concise (recommended ≤ 72 characters).
+  - Reference module scope whenever possible (for example: `network`, `theme`, `comment`, `core`, `ui`, `business`, `sample`, `docs`).
+  - Add a body when context is needed (why, impact, migration notes).
+- Open pull requests into `develop` with:
+  - change summary
+  - test/verification notes
+  - migration notes when APIs change
+- Tag stable releases with semantic versions (for example: `0.1.0`), then merge release work back into `develop`.
 
 ## License
 

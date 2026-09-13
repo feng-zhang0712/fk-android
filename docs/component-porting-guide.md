@@ -17,7 +17,16 @@ Guidance for what to encapsulate in **fk-android** (`:core` / `:ui` / `:business
 
 **Target stack (reference)**
 
-OkHttp / Ktor · DataStore · WorkManager · BiometricPrompt · Media3 · Coil · Jetpack Compose · Material 3
+OkHttp · DataStore · WorkManager · BiometricPrompt · Media3 · Coil · Jetpack Compose · Material 3 · kotlinx.serialization · Coroutines
+
+**Module dependency (hard rule)**
+
+```text
+:business → :ui → :core
+:sample   → :business   (demo only; not published)
+```
+
+Do not invent reverse dependencies (`:core` must not depend on `:ui`).
 
 ---
 
@@ -32,6 +41,118 @@ OkHttp / Ktor · DataStore · WorkManager · BiometricPrompt · Media3 · Coil �
 
 ---
 
+## Recommended encapsulation order
+
+Work **top to bottom**. Finish a phase’s **verify** gate before starting the next. Prefer one feature branch per row (or small coherent group), branched from `develop` (for example `feature/pluggable`, `feature/network`).
+
+### Priority legend
+
+| Priority | Meaning |
+|----------|---------|
+| **P0** | Foundation — blocks almost everything else |
+| **P1** | High reuse across apps; do soon after P0 |
+| **P2** | Important UX chrome; after design tokens exist |
+| **P3** | Business composites; after list / form primitives |
+| **P4** | Optional / vertical / media — only when product needs it |
+
+### Phase A — `:core` contracts & data plane (P0)
+
+| Order | Package | iOS source | Scope | Verify |
+|------:|---------|------------|-------|--------|
+| A1 | `pluggable` | Pluggable | Protocol seams: networking, storage, session, routing, analytics, logging, media, config. No heavy implementations yet — interfaces + composition root hooks. | Sample can bind mock implementations |
+| A2 | `network` | Network | OkHttp-based client façade: endpoints, interceptors, retry, error model, optional SSL pin / cache policy | Smoke request in `:sample` or unit test |
+| A3 | `storage` | Storage | Key-value + typed storage on DataStore; encrypted path via Keystore strategy | Round-trip read/write |
+| A4 | `logging` | Logger | Levels, structured fields, optional file sink | Logs visible from sample |
+| A5 | `mapping` | ModelMapping | kotlinx.serialization conventions + business envelope helpers | Encode/decode sample DTO |
+
+**Why this order:** Pluggable first so Network/Storage/Logger plug into seams instead of becoming hard-wired singletons.
+
+### Phase B — `:core` security, locale, device façades (P1)
+
+| Order | Package | iOS source | Scope | Verify |
+|------:|---------|------------|-------|--------|
+| B1 | `security` | Security | Hash / AES / RSA / HMAC / masking / random; Keystore-backed key storage | Encrypt/decrypt round-trip |
+| B2 | `i18n` | I18n | Runtime locale switch, typed keys, formatters (beyond static `res/values`) | Switch locale in sample |
+| B3 | `permissions` | Permissions | Unified check/request façade over Android runtime permissions | Request one permission end-to-end |
+| B4 | `biometric` | BiometricAuth | Thin BiometricPrompt façade (capability / policy / errors) | Prompt on device/emulator with biometrics |
+| B5 | `background` | BackgroundTask | WorkManager scheduling contract (refresh / processing) | Enqueue + observe one worker |
+| B6 | `notification` | LocalNotification | Channels + schedule/cancel model over NotificationManager | Schedule a local notification |
+
+**Thin / defer inside Phase B**
+
+| Package | Note |
+|---------|------|
+| `async` | Only if shared debounce/throttle APIs are needed across modules |
+| `datetime` | Only if Moment-style shared formatters are needed for API parity |
+
+### Phase C — `:core` files, images, app infra (P1)
+
+| Order | Package | iOS source | Scope | Verify |
+|------:|---------|------------|-------|--------|
+| C1 | `file` | FileManager (transfers) | Resumable download/upload, queue, transfer persistence | Transfer a file with pause/resume path |
+| C2 | `image` | ImageLoader (contract) | `ImageLoading` interface; Coil adapter as default impl | Load remote image via contract |
+| C3 | `app` | BusinessKit (non-UI) | Version, deeplink parse/route hooks, lifecycle, analytics sink, startup tasks | Deeplink parse + version string in sample |
+
+### Phase D — `:ui` design system & feedback (P2)
+
+| Order | Package | iOS source | Scope | Verify |
+|------:|---------|------------|-------|--------|
+| D1 | `theme` | Theme | Color / typography / spacing / shape tokens; `FkTheme` | Sample themed screen |
+| D2 | `empty` | EmptyState | Loading / empty / error overlays | Toggle states in sample |
+| D3 | `skeleton` | Skeleton | Shimmer / placeholder patterns | Skeleton on a list placeholder |
+| D4 | `toast` | Toast / HUD / Snackbar | Unified queue + HUD + snackbar styling | Enqueue multiple toasts |
+
+**Do not** implement Material clones (Button, Alert, Checkbox, …) in this phase.
+
+### Phase E — `:ui` forms & lists (P2)
+
+| Order | Package | iOS source | Scope | Verify |
+|------:|---------|------------|-------|--------|
+| E1 | `list` | ListKit + Refresh | Refresh, load-more chrome, empty/skeleton orchestration helpers for Lazy lists | Sample list with pull-to-refresh + empty |
+| E2 | `textfield` | TextField (form) | Formatting, validation, OTP, counters — not a basic TextField wrapper | OTP + validated field demos |
+| E3 | `sheet` | SheetPresentationController | **Only if** product needs multi-detent / anchored sheet beyond ModalBottomSheet | Optional sample |
+
+### Phase F — `:business` composites (P3)
+
+| Order | Package | iOS source | Scope | Verify |
+|------:|---------|------------|-------|--------|
+| F1 | `comment` | CommentKit | Models + contracts + Compose list/composer (no networking) | Full comment demo in `:sample` |
+| F2 | `filter` | TabBarFilter | Multi-panel filter UX (hierarchy / dual / tags / list) | Filter demo in `:sample` |
+| F3 | `cell` | CellKit (selective) | **Per vertical** item models + Compose rows — never dump all iOS cells | Only rows your apps need |
+
+### Phase G — optional media & extras (P4)
+
+| Order | Area | When |
+|------:|------|------|
+| G1 | Media3 player orchestration | Shared offline / resume / feed pool required |
+| G2 | WebView JS bridge | Multiple apps share the same bridge contract |
+| G3 | Widgets (Avatar / Chip / StatusPill) | Brand needs exceed Material defaults |
+| G4 | QR helpers | Many apps need one shared API (otherwise use ML Kit directly) |
+
+### Suggested milestone map
+
+```text
+Milestone 0  Scaffold          ✅ (repo, modules, this guide)
+Milestone 1  Core data plane   Phase A
+Milestone 2  Core façades      Phase B + C
+Milestone 3  UI foundation     Phase D
+Milestone 4  UI lists/forms    Phase E
+Milestone 5  Business kits     Phase F1–F2
+Milestone 6  Vertical cells    Phase F3 (as needed)
+Milestone 7  Media / extras    Phase G (as needed)
+```
+
+### Order rationale (short)
+
+1. **Contracts before implementations** — Pluggable prevents hard-wired globals.
+2. **Network / storage / log / map together** — every feature needs them.
+3. **Security & permissions next** — many flows depend on them early.
+4. **Theme before UI widgets** — Empty/Skeleton/Toast must consume tokens.
+5. **List + TextField before business** — Comment/Filter compose those primitives.
+6. **Business before optional media** — most apps need comments/filters sooner than a custom player stack.
+
+---
+
 ## 1. FKCoreKit → `:core`
 
 ### Encapsulate
@@ -43,7 +164,7 @@ OkHttp / Ktor · DataStore · WorkManager · BiometricPrompt · Media3 · Coil �
 | **Storage** | `com.fk.core.storage` | DataStore / SharedPreferences exist; wrap unified key-value / typed storage + encrypted storage strategy (Keystore). |
 | **Security** | `com.fk.core.security` | JCA + Keystore exist; unified façade for AES / RSA / HMAC / masking / random keeps compliance and cross-app consistency. |
 | **ModelMapping** | `com.fk.core.mapping` | Shared serialization conventions and business envelopes (kotlinx.serialization / Moshi patterns). |
-| **Logger** | `com.fk.core.logging` | Structured logging, file persistence, crash hooks beyond a bare Timber-style println. |
+| **Logger** | `com.fk.core.logging` | Levels, structured fields, optional file persistence, crash hooks. |
 | **I18n** (runtime) | `com.fk.core.i18n` | Resources cover static strings; wrap **in-app locale switch**, remote dictionaries, typed keys. |
 | **FileManager** (transfers) | `com.fk.core.file` | Resumable upload/download, transfer queue, persistence — not provided turnkey by the platform. |
 | **ImageLoader** (contract) | `com.fk.core.image` | Implement with Coil; expose an `ImageLoading` interface aligned with Pluggable media. |
@@ -154,41 +275,21 @@ This iOS package is UIKit business chrome. **Do not port ViewController / Cell b
 
 ---
 
-## 4. Suggested implementation order
-
-```text
-1. :core — pluggable contracts + network / storage / logging / mapping
-2. :core — security / i18n / permissions (+ thin biometric / background / notification façades)
-3. :core — file transfers + image-loading contract + app infrastructure (version / deeplink / lifecycle)
-4. :ui  — theme tokens
-5. :ui  — empty / skeleton / toast queue
-6. :ui  — list orchestration + text field form helpers (+ sheet only if needed)
-7. :business — comment + filter
-8. :business — selective cell/row patterns by vertical
-9. Media orchestration (Media3) — only if product-critical
-```
-
-Dependency rule (unchanged):
-
-```text
-:business → :ui → :core
-```
-
----
-
-## 5. What “done” means for a new component
+## 4. What “done” means for a new component
 
 Before merging a new public API into fk-android:
 
 1. Confirm it is **Encapsulate** or an approved **Optional** in this guide (or update this guide with rationale).
 2. Prefer extending an existing package over adding a new top-level concept.
-3. Public types documented in English; no Chinese in library sources.
-4. Sample coverage under `:sample` for every public capability worth demoing.
-5. `./gradlew :module:assembleRelease` succeeds; no speculative dependencies (Hilt, Media3, CameraX, …) until a component needs them.
+3. Follow the **Recommended encapsulation order** unless you document why a later phase is pulled forward.
+4. Public types documented in English; no Chinese in library sources.
+5. Sample coverage under `:sample` for every public capability worth demoing.
+6. `./gradlew :module:assembleRelease` succeeds; no speculative dependencies (Hilt, Media3, CameraX, …) until a component needs them.
+7. Open the PR against **`develop`** (see root README → Branching & Collaboration).
 
 ---
 
-## 6. Quick checklist
+## 5. Quick checklist
 
 **Do encapsulate**
 
@@ -200,4 +301,4 @@ Material commodity controls (Button, Alert, basic Sheet, Badge, Divider, Checkbo
 
 ---
 
-*Last updated: 2026-09-13 — derived from FKKit / FKBusinessKit inventory review for fk-android scaffolding.*
+*Last updated: 2026-09-13 — phases A–G ordered for fk-android implementation.*
