@@ -40,27 +40,28 @@ Follow this checklist for **every** new component module. Contributors should no
 1. Branch from **`develop`**: `git checkout develop && git pull && git checkout -b feature/<package>` (example: `feature/pluggable`).
 2. Encapsulate **exactly one** component / package per branch and PR (for example only `pluggable`, not `pluggable` + `network`).
 3. Open the PR against **`develop`**, not `main`.
+4. **Do not `git commit` / `git push` automatically** after implementing a component. Leave changes in the working tree (or staged only if asked). Commit and push **only after the maintainer confirms local testing is OK** (or explicitly asks to commit).
 
 ### Design
 
-4. Use iOS FKKit / FKBusinessKit as **reference** for capabilities and edge cases — not as a line-for-line API port.
-5. Prefer Android / Jetpack / Material idioms (`suspend`, Compose, DataStore, WorkManager, …) over UIKit-shaped APIs.
-6. Organize code by **Android package responsibility** under the owning module (`:core` / `:ui` / `:business`). Do not mirror iOS folder trees when a clearer layout exists.
-7. Keep public APIs narrow; hide implementation details as `internal` / `private`.
+5. Use iOS FKKit / FKBusinessKit as **reference** for capabilities and edge cases — not as a line-for-line API port.
+6. Prefer Android / Jetpack / Material idioms (`suspend`, Compose, DataStore, WorkManager, …) over UIKit-shaped APIs.
+7. Organize code by **Android package responsibility** under the owning module (`:core` / `:ui` / `:business`). Do not mirror iOS folder trees when a clearer layout exists.
+8. Keep public APIs narrow; hide implementation details as `internal` / `private`.
 
 ### Quality & docs
 
-8. Public types and members need English KDoc (`/** … */`). Library sources, comments, and docs are **English only**.
-9. Update this guide’s decision tables if you intentionally add something marked Skip / Optional.
-10. Demonstrate the new public surface in **`:sample`** (smoke UI or clear usage).
-11. Compile before handing off: `./gradlew :<module>:assembleRelease :sample:assembleDebug` must succeed.
-12. Do not add speculative dependencies (Hilt, Media3, CameraX, …) until a component in this PR needs them.
-13. Indentation: **2 spaces** (see `.editorconfig`).
+9. Public types and members need English KDoc (`/** … */`). Library sources, comments, and docs are **English only**.
+10. Update this guide’s decision tables if you intentionally add something marked Skip / Optional.
+11. Demonstrate the new public surface in **`:sample`**: register a [SampleDestination](../sample/src/main/kotlin/com/fk/sample/catalog/SampleCatalog.kt) under the correct group on the home hub, plus a dedicated demo screen.
+12. Compile before handing off: `./gradlew :<module>:assembleRelease :sample:assembleDebug` must succeed.
+13. Do not add speculative dependencies (Hilt, Media3, CameraX, …) until a component in this PR needs them.
+14. Indentation: **2 spaces** (see `.editorconfig`).
 
 ### Naming
 
-14. Feature branch: `feature/<package>` matching the package folder (e.g. `feature/network`).
-15. Commits: conventional style, e.g. `feat(pluggable): add DI contract interfaces`.
+15. Feature branch: `feature/<package>` matching the package folder (e.g. `feature/network`).
+16. Commits: conventional style, e.g. `feat(pluggable): add DI contract interfaces` — created only after testing approval (see item 4).
 
 ---
 
