@@ -1,10 +1,10 @@
 package com.fk.sample
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.fk.sample.catalog.SampleDestination
 import com.fk.sample.catalog.SampleGroup
+import com.fk.sample.core.biometric.BiometricDemoScreen
 import com.fk.sample.core.i18n.I18nDemoScreen
 import com.fk.sample.core.logging.LoggingDemoScreen
 import com.fk.sample.core.mapping.MappingDemoScreen
@@ -26,8 +27,10 @@ import com.fk.ui.theme.FkTheme
 
 /**
  * Sample app entry: module hub → group list → component demo.
+ *
+ * Extends [FragmentActivity] so Jetpack BiometricPrompt can host prompts.
  */
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
@@ -91,6 +94,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.PERMISSIONS) {
       PermissionsDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.BIOMETRIC) {
+      BiometricDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }

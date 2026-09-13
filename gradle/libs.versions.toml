@@ -12,6 +12,7 @@ activity = "1.10.0"
 navigation = "2.8.6"
 lifecycle = "2.8.7"
 coil = "2.7.0"
+biometric = "1.1.0"
 junit = "4.13.2"
 
 [libraries]
@@ -37,6 +38,8 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
+androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 

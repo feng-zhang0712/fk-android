@@ -42,4 +42,5 @@ Keystore → [`storage`](../storage/README.md); Logcat/file →
 [`mapping`](../mapping/README.md). Crypto façade →
 [`security`](../security/README.md). Runtime I18n →
 [`i18n`](../i18n/README.md). Permissions façade →
-[`permissions`](../permissions/README.md). Mocks remain for samples/tests.
+[`permissions`](../permissions/README.md). BiometricPrompt façade →
+[`biometric`](../biometric/README.md). Mocks remain for samples/tests.

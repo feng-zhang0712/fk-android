@@ -58,6 +58,7 @@ data class SampleDestination(
     const val SECURITY = "core/security"
     const val I18N = "core/i18n"
     const val PERMISSIONS = "core/permissions"
+    const val BIOMETRIC = "core/biometric"
   }
 }
 
@@ -111,6 +112,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "Permissions",
       description = "Unified check / request over runtime permissions",
+    ),
+    SampleDestination(
+      route = SampleDestination.BIOMETRIC,
+      group = SampleGroup.Core,
+      title = "Biometric",
+      description = "BiometricPrompt façade: capability / policy / errors",
     ),
     SampleDestination(
       route = "ui/theme",
