@@ -47,4 +47,5 @@ Keystore → [`storage`](../storage/README.md); Logcat/file →
 [`background`](../background/README.md). Local notification channels →
 [`notification`](../notification/README.md). Resumable file transfers →
 [`file`](../file/README.md). Image loading contract (Coil) →
-[`image`](../image/README.md). Mocks remain for samples/tests.
+[`image`](../image/README.md). App infra (version / deeplink / lifecycle) →
+[`app`](../app/README.md). Mocks remain for samples/tests.

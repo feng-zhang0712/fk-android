@@ -39,6 +39,7 @@ dependencies {
   api(libs.androidx.biometric)
   api(libs.androidx.work.runtime)
   api(libs.coil)
+  api(libs.androidx.lifecycle.process)
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.androidx.datastore.preferences)
   implementation(libs.okhttp.logging)

@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.fk.sample.catalog.SampleDestination
 import com.fk.sample.catalog.SampleGroup
+import com.fk.sample.core.app.AppDemoScreen
 import com.fk.sample.core.background.BackgroundDemoScreen
 import com.fk.sample.core.biometric.BiometricDemoScreen
 import com.fk.sample.core.file.FileDemoScreen
@@ -113,6 +114,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.IMAGE) {
       ImageDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.APP) {
+      AppDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }

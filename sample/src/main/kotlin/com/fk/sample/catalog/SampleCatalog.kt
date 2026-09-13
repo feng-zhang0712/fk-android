@@ -63,6 +63,7 @@ data class SampleDestination(
     const val NOTIFICATION = "core/notification"
     const val FILE = "core/file"
     const val IMAGE = "core/image"
+    const val APP = "core/app"
   }
 }
 
@@ -146,6 +147,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "Image",
       description = "ImageLoading contract + Coil adapter",
+    ),
+    SampleDestination(
+      route = SampleDestination.APP,
+      group = SampleGroup.Core,
+      title = "App",
+      description = "Version / deeplink / lifecycle / analytics / startup",
     ),
     SampleDestination(
       route = "ui/theme",
