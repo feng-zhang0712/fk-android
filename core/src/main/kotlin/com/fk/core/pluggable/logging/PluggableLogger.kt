@@ -3,7 +3,7 @@ package com.fk.core.pluggable.logging
 /**
  * Severity for [PluggableLogger] implementations.
  *
- * Named distinctly from any future `:core` `logging` package levels.
+ * Named distinctly from [com.fk.core.logging.LogLevel] in the logging package.
  */
 enum class PluggableLogLevel {
   Verbose,
@@ -16,8 +16,8 @@ enum class PluggableLogLevel {
 /**
  * Pluggable logger used across networking and feature modules.
  *
- * Wire a Logcat logger in debug and a redacted / file-backed logger in production
- * (see future `:core` `logging` package).
+ * Wire [com.fk.core.logging.FkLogger] (Logcat and/or file sinks) in the host app,
+ * or [com.fk.core.pluggable.mock.MockPluggableLogger] for samples and tests.
  */
 interface PluggableLogger {
   /** Minimum level emitted by this logger. */

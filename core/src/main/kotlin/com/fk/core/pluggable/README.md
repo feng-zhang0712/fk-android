@@ -37,4 +37,5 @@ Prefer injecting individual interfaces into feature modules over passing
 `PluggableServices` everywhere.
 
 Concrete adapters: OkHttp → [`network`](../network/README.md); DataStore +
-Keystore → [`storage`](../storage/README.md). Mocks remain for samples/tests.
+Keystore → [`storage`](../storage/README.md); Logcat/file →
+[`logging`](../logging/README.md). Mocks remain for samples/tests.
