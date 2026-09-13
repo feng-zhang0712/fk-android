@@ -62,6 +62,7 @@ data class SampleDestination(
     const val BACKGROUND = "core/background"
     const val NOTIFICATION = "core/notification"
     const val FILE = "core/file"
+    const val IMAGE = "core/image"
   }
 }
 
@@ -139,6 +140,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "File",
       description = "Resumable download / upload + pause / resume",
+    ),
+    SampleDestination(
+      route = SampleDestination.IMAGE,
+      group = SampleGroup.Core,
+      title = "Image",
+      description = "ImageLoading contract + Coil adapter",
     ),
     SampleDestination(
       route = "ui/theme",

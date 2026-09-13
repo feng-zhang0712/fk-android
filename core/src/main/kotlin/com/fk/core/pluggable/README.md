@@ -46,4 +46,5 @@ Keystore → [`storage`](../storage/README.md); Logcat/file →
 [`biometric`](../biometric/README.md). WorkManager background scheduling →
 [`background`](../background/README.md). Local notification channels →
 [`notification`](../notification/README.md). Resumable file transfers →
-[`file`](../file/README.md). Mocks remain for samples/tests.
+[`file`](../file/README.md). Image loading contract (Coil) →
+[`image`](../image/README.md). Mocks remain for samples/tests.
