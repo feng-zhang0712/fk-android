@@ -55,6 +55,7 @@ data class SampleDestination(
     const val STORAGE = "core/storage"
     const val LOGGING = "core/logging"
     const val MAPPING = "core/mapping"
+    const val SECURITY = "core/security"
   }
 }
 
@@ -90,6 +91,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "Mapping",
       description = "JSON conventions + business envelope helpers",
+    ),
+    SampleDestination(
+      route = SampleDestination.SECURITY,
+      group = SampleGroup.Core,
+      title = "Security",
+      description = "Hash / AES / RSA / HMAC + Keystore key store",
     ),
     SampleDestination(
       route = "ui/theme",

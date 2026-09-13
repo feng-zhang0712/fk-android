@@ -39,4 +39,5 @@ Prefer injecting individual interfaces into feature modules over passing
 Concrete adapters: OkHttp → [`network`](../network/README.md); DataStore +
 Keystore → [`storage`](../storage/README.md); Logcat/file →
 [`logging`](../logging/README.md); JSON/envelope →
-[`mapping`](../mapping/README.md). Mocks remain for samples/tests.
+[`mapping`](../mapping/README.md). Crypto façade →
+[`security`](../security/README.md). Mocks remain for samples/tests.
