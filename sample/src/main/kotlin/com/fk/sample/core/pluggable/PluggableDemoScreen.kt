@@ -11,9 +11,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import com.fk.sample.ui.SampleTopBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +38,7 @@ import com.fk.core.pluggable.networking.ApiRequest
 import com.fk.core.pluggable.networking.ApiResponse
 import com.fk.core.pluggable.networking.HttpMethod
 import com.fk.core.pluggable.storage.DefaultTypedStore
+import com.fk.sample.ui.SampleTopBar
 import kotlinx.coroutines.launch
 import kotlinx.serialization.builtins.serializer
 
@@ -79,9 +80,8 @@ fun PluggableDemoScreen(
     )
   }
 
-  DisposableEffect(Unit) {
+  LaunchedEffect(logger) {
     logger.info { "Pluggable sample started (contract=${Pluggable.CONTRACT_VERSION})" }
-    onDispose { }
   }
 
   val scope = rememberCoroutineScope()

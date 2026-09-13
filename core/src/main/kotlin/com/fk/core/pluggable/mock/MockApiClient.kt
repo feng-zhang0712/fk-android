@@ -25,10 +25,7 @@ class MockApiClient : ApiClient {
 
   override suspend fun perform(request: ApiRequest): ApiResponse {
     val result = responses[request.url] ?: defaultResponse
-    return when {
-      result == null -> ApiResponse(data = ByteArray(0), statusCode = 204)
-      result.isSuccess -> result.getOrThrow()
-      else -> throw result.exceptionOrNull()!!
-    }
+    return result?.getOrThrow()
+      ?: ApiResponse(data = ByteArray(0), statusCode = 204)
   }
 }

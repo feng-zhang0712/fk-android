@@ -18,7 +18,7 @@ import com.fk.core.pluggable.storage.TypedStore
  * Prefer injecting **individual** interfaces into feature modules rather than
  * passing this container everywhere. Useful for samples and small apps.
  *
- * Nullable fields are intentional — wire only what the host needs for A1.
+ * Nullable fields are intentional — wire only what the host needs.
  */
 data class PluggableServices(
   val apiClient: ApiClient? = null,

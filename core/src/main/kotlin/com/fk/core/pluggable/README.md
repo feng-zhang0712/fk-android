@@ -1,6 +1,7 @@
 # Pluggable (`com.fk.core.pluggable`)
 
-DI / replaceable contracts for app infrastructure. Phase **A1** in the root [component guide](../../../../../../../../docs/component-guide.md).
+DI / replaceable contracts for app infrastructure. Phase **A1** in the root
+[component guide](../../../../../../../../docs/component-guide.md).
 
 ## Layout
 
@@ -32,6 +33,8 @@ val services = PluggableServices(
 )
 ```
 
-Prefer injecting individual interfaces into feature modules over passing [PluggableServices] everywhere.
+Prefer injecting individual interfaces into feature modules over passing
+`PluggableServices` everywhere.
 
-Heavy OkHttp / DataStore adapters arrive in later packages (`network`, `storage`).
+Concrete adapters: OkHttp → [`network`](../network/README.md); DataStore-backed
+storage arrives in the later `storage` package. Mocks remain for samples/tests.

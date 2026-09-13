@@ -57,6 +57,9 @@ object PluggableJson {
 
 /**
  * Default [TypedStore] implementation over a [KeyValueStore] + [StringFormat].
+ *
+ * Values are encoded as UTF-8 text (typically JSON). Prefer [KeyValueStore] directly
+ * for opaque binary payloads.
  */
 class DefaultTypedStore(
   private val keyValueStore: KeyValueStore,
