@@ -54,6 +54,7 @@ data class SampleDestination(
     const val NETWORK = "core/network"
     const val STORAGE = "core/storage"
     const val LOGGING = "core/logging"
+    const val MAPPING = "core/mapping"
   }
 }
 
@@ -83,6 +84,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "Logging",
       description = "Logcat + file sink with structured fields",
+    ),
+    SampleDestination(
+      route = SampleDestination.MAPPING,
+      group = SampleGroup.Core,
+      title = "Mapping",
+      description = "JSON conventions + business envelope helpers",
     ),
     SampleDestination(
       route = "ui/theme",

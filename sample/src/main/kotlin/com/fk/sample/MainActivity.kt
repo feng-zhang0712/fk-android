@@ -12,9 +12,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.fk.sample.catalog.SampleDestination
 import com.fk.sample.catalog.SampleGroup
+import com.fk.sample.core.logging.LoggingDemoScreen
+import com.fk.sample.core.mapping.MappingDemoScreen
 import com.fk.sample.core.network.NetworkDemoScreen
 import com.fk.sample.core.pluggable.PluggableDemoScreen
-import com.fk.sample.core.logging.LoggingDemoScreen
 import com.fk.sample.core.storage.StorageDemoScreen
 import com.fk.sample.home.SampleGroupScreen
 import com.fk.sample.home.SampleHomeScreen
@@ -75,6 +76,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.LOGGING) {
       LoggingDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.MAPPING) {
+      MappingDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }
