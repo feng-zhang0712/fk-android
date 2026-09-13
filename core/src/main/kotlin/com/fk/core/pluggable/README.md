@@ -44,4 +44,5 @@ Keystore → [`storage`](../storage/README.md); Logcat/file →
 [`i18n`](../i18n/README.md). Permissions façade →
 [`permissions`](../permissions/README.md). BiometricPrompt façade →
 [`biometric`](../biometric/README.md). WorkManager background scheduling →
-[`background`](../background/README.md). Mocks remain for samples/tests.
+[`background`](../background/README.md). Local notification channels →
+[`notification`](../notification/README.md). Mocks remain for samples/tests.

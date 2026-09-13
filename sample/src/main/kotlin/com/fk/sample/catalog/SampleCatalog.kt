@@ -60,6 +60,7 @@ data class SampleDestination(
     const val PERMISSIONS = "core/permissions"
     const val BIOMETRIC = "core/biometric"
     const val BACKGROUND = "core/background"
+    const val NOTIFICATION = "core/notification"
   }
 }
 
@@ -125,6 +126,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "Background",
       description = "WorkManager refresh / processing schedule + observe",
+    ),
+    SampleDestination(
+      route = SampleDestination.NOTIFICATION,
+      group = SampleGroup.Core,
+      title = "Notification",
+      description = "Local notification channels + schedule / cancel",
     ),
     SampleDestination(
       route = "ui/theme",

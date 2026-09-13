@@ -18,6 +18,7 @@ import com.fk.sample.core.i18n.I18nDemoScreen
 import com.fk.sample.core.logging.LoggingDemoScreen
 import com.fk.sample.core.mapping.MappingDemoScreen
 import com.fk.sample.core.network.NetworkDemoScreen
+import com.fk.sample.core.notification.NotificationDemoScreen
 import com.fk.sample.core.permissions.PermissionsDemoScreen
 import com.fk.sample.core.pluggable.PluggableDemoScreen
 import com.fk.sample.core.security.SecurityDemoScreen
@@ -101,6 +102,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.BACKGROUND) {
       BackgroundDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.NOTIFICATION) {
+      NotificationDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }
