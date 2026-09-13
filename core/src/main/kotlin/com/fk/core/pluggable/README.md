@@ -45,4 +45,5 @@ Keystore → [`storage`](../storage/README.md); Logcat/file →
 [`permissions`](../permissions/README.md). BiometricPrompt façade →
 [`biometric`](../biometric/README.md). WorkManager background scheduling →
 [`background`](../background/README.md). Local notification channels →
-[`notification`](../notification/README.md). Mocks remain for samples/tests.
+[`notification`](../notification/README.md). Resumable file transfers →
+[`file`](../file/README.md). Mocks remain for samples/tests.

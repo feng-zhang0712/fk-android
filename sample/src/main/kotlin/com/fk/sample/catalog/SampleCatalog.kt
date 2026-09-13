@@ -61,6 +61,7 @@ data class SampleDestination(
     const val BIOMETRIC = "core/biometric"
     const val BACKGROUND = "core/background"
     const val NOTIFICATION = "core/notification"
+    const val FILE = "core/file"
   }
 }
 
@@ -132,6 +133,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "Notification",
       description = "Local notification channels + schedule / cancel",
+    ),
+    SampleDestination(
+      route = SampleDestination.FILE,
+      group = SampleGroup.Core,
+      title = "File",
+      description = "Resumable download / upload + pause / resume",
     ),
     SampleDestination(
       route = "ui/theme",

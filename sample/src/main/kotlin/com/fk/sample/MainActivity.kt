@@ -14,6 +14,7 @@ import com.fk.sample.catalog.SampleDestination
 import com.fk.sample.catalog.SampleGroup
 import com.fk.sample.core.background.BackgroundDemoScreen
 import com.fk.sample.core.biometric.BiometricDemoScreen
+import com.fk.sample.core.file.FileDemoScreen
 import com.fk.sample.core.i18n.I18nDemoScreen
 import com.fk.sample.core.logging.LoggingDemoScreen
 import com.fk.sample.core.mapping.MappingDemoScreen
@@ -105,6 +106,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.NOTIFICATION) {
       NotificationDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.FILE) {
+      FileDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }
