@@ -16,11 +16,11 @@ private val DarkColors = darkColorScheme()
  */
 @Composable
 fun FkTheme(
-    darkTheme: Boolean = false,
-    content: @Composable () -> Unit,
+  darkTheme: Boolean = false,
+  content: @Composable () -> Unit,
 ) {
-    MaterialTheme(
-        colorScheme = if (darkTheme) DarkColors else LightColors,
-        content = content,
-    )
+  MaterialTheme(
+    colorScheme = if (darkTheme) DarkColors else LightColors,
+    content = content,
+  )
 }

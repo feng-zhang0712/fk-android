@@ -18,24 +18,24 @@ import com.fk.ui.FkUi
 import com.fk.ui.theme.FkTheme
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            FkTheme {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text("fk-android sample")
-                    Text("core ${FkCore.VERSION}")
-                    Text("ui ${FkUi.VERSION}")
-                    Text("business ${FkBusiness.VERSION}")
-                }
-            }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
+    setContent {
+      FkTheme {
+        Column(
+          modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+          verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+          horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+          Text("fk-android sample")
+          Text("core ${FkCore.VERSION}")
+          Text("ui ${FkUi.VERSION}")
+          Text("business ${FkBusiness.VERSION}")
         }
+      }
     }
+  }
 }

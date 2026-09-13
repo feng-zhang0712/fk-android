@@ -16,11 +16,20 @@ Android component libraries corresponding to iOS [FKKit](../FKKit) / [FKBusiness
 
 **Naming:** short module names; brand lives in Maven `groupId` (`com.fk.android`), not in every artifact prefix.
 
+
+## Code style
+
+- **Indentation:** 2 spaces (no tabs) for Kotlin, Gradle Kotlin DSL, XML, TOML, and Markdown.
+- Configured via root [`.editorconfig`](.editorconfig) (Android Studio / IntelliJ / VS Code / Cursor honor it when EditorConfig is enabled).
+- Prefer the project `.editorconfig` over personal IDE defaults when contributing.
+
 ## Requirements
 
 - JDK 17+
-- Android SDK (compile / target **36**, min **24**)
+- Android SDK (compile / target **36**, **minSdk 24**)
 - Android Studio Ladybug+ (or compatible AGP 8.8)
+
+`minSdk 24` (Android 7.0) is intentional for a shared library: broader device reach than matching iOS 15’s calendar year (≈ API 31), while still covering virtually all active Android devices. Raise only if a future component requires newer platform APIs.
 
 ## Project layout
 
@@ -87,16 +96,16 @@ fk-android/
 
 ```kotlin
 dependencies {
-    implementation(project(":business")) // pulls :ui and :core
-    // or:
-    implementation(project(":core"))
-    implementation(project(":ui"))
+  implementation(project(":business")) // pulls :ui and :core
+  // or:
+  implementation(project(":core"))
+  implementation(project(":ui"))
 }
 ```
 
 ## Porting guide
 
-Before adding components, read **[docs/component-porting-guide.md](docs/component-porting-guide.md)**. GitHub About / topics: **[docs/github-about.md](docs/github-about.md)** — what to encapsulate from FKKit / FKBusinessKit vs what to leave to Android / Material.
+Before adding components, read **[docs/component-porting-guide.md](docs/component-porting-guide.md)** — what to encapsulate from FKKit / FKBusinessKit vs what to leave to Android / Material.
 
 ## Design notes
 
