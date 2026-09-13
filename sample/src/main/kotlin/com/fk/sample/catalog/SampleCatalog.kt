@@ -53,6 +53,7 @@ data class SampleDestination(
     const val PLUGGABLE = "core/pluggable"
     const val NETWORK = "core/network"
     const val STORAGE = "core/storage"
+    const val LOGGING = "core/logging"
   }
 }
 
@@ -76,6 +77,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "Storage",
       description = "DataStore key-value + Keystore-encrypted TypedStore",
+    ),
+    SampleDestination(
+      route = SampleDestination.LOGGING,
+      group = SampleGroup.Core,
+      title = "Logging",
+      description = "Logcat + file sink with structured fields",
     ),
     SampleDestination(
       route = "ui/theme",
