@@ -8,12 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import com.fk.sample.ui.SampleTopBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -46,7 +44,6 @@ import kotlinx.serialization.builtins.serializer
 /**
  * Smoke demo for Phase A1 Pluggable contracts.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PluggableDemoScreen(
   onBack: () -> Unit,
@@ -100,14 +97,7 @@ fun PluggableDemoScreen(
   }
 
   Scaffold(
-    topBar = {
-      TopAppBar(
-        title = { Text("Pluggable") },
-        navigationIcon = {
-          TextButton(onClick = onBack) { Text("Back") }
-        },
-      )
-    },
+    topBar = { SampleTopBar(title = "Pluggable", onBack = onBack) },
   ) { padding ->
     Column(
       modifier = Modifier

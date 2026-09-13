@@ -53,7 +53,7 @@ Follow this checklist for **every** new component module. Contributors should no
 
 9. Public types and members need English KDoc (`/** … */`). Library sources, comments, and docs are **English only**.
 10. Update this guide’s decision tables if you intentionally add something marked Skip / Optional.
-11. Demonstrate the new public surface in **`:sample`**: register a [SampleDestination](../sample/src/main/kotlin/com/fk/sample/catalog/SampleCatalog.kt) under the correct group on the home hub, plus a dedicated demo screen.
+11. Demonstrate the new public surface in **`:sample`**: register a [SampleDestination](../sample/src/main/kotlin/com/fk/sample/catalog/SampleCatalog.kt) under Core / UI / Business, plus a dedicated demo screen (home → group list → demo). Use [SampleTopBar](../sample/src/main/kotlin/com/fk/sample/ui/SampleTopBar.kt) for up navigation.
 12. Compile before handing off: `./gradlew :<module>:assembleRelease :sample:assembleDebug` must succeed.
 13. Do not add speculative dependencies (Hilt, Media3, CameraX, …) until a component in this PR needs them.
 14. Indentation: **2 spaces** (see `.editorconfig`).

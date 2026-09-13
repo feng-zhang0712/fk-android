@@ -3,6 +3,10 @@ package com.fk.sample.catalog
 /**
  * Declarative catalog of demo scenarios for the sample app.
  *
+ * Navigation is two-level:
+ * 1. Home → Core / UI / Business
+ * 2. Group → component demos for that module
+ *
  * Add a [SampleDestination] under the matching [SampleGroup] when encapsulating
  * a new component. Keep route ids stable — they are used by Navigation Compose.
  */
@@ -22,13 +26,17 @@ enum class SampleGroup(
     title = "Business",
     subtitle = "Business composites and feature kits",
   ),
+  ;
+
+  /** Navigation route for this group's list screen. */
+  val route: String get() = "group/${name.lowercase()}"
 }
 
 /**
  * A single navigable demo entry.
  *
  * @property route Navigation route id (stable).
- * @property group Catalog section.
+ * @property group Parent module group.
  * @property title List row title.
  * @property description One-line summary shown under the title.
  * @property available When false, the row is shown as coming soon and not navigable.
@@ -43,10 +51,11 @@ data class SampleDestination(
   companion object {
     const val HOME = "home"
     const val PLUGGABLE = "core/pluggable"
+    const val NETWORK = "core/network"
   }
 }
 
-/** Full catalog shown on the home hub. */
+/** Full catalog of component demos. */
 object SampleCatalog {
   val destinations: List<SampleDestination> = listOf(
     SampleDestination(
@@ -55,13 +64,11 @@ object SampleCatalog {
       title = "Pluggable",
       description = "DI contracts, mocks, session / storage / API smoke demo",
     ),
-    // Placeholders help show grouping before later packages land.
     SampleDestination(
-      route = "core/network",
+      route = SampleDestination.NETWORK,
       group = SampleGroup.Core,
       title = "Network",
-      description = "OkHttp client façade (coming soon)",
-      available = false,
+      description = "OkHttp ApiClient façade over Pluggable contracts",
     ),
     SampleDestination(
       route = "ui/theme",
@@ -79,9 +86,9 @@ object SampleCatalog {
     ),
   )
 
-  fun grouped(): List<Pair<SampleGroup, List<SampleDestination>>> =
-    SampleGroup.entries.mapNotNull { group ->
-      val items = destinations.filter { it.group == group }
-      if (items.isEmpty()) null else group to items
-    }
+  fun destinationsIn(group: SampleGroup): List<SampleDestination> =
+    destinations.filter { it.group == group }
+
+  fun groupOrNull(route: String): SampleGroup? =
+    SampleGroup.entries.firstOrNull { it.route == route }
 }

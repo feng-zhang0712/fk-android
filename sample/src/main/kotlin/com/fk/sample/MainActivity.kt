@@ -5,16 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.fk.sample.catalog.SampleDestination
+import com.fk.sample.catalog.SampleGroup
+import com.fk.sample.core.network.NetworkDemoScreen
 import com.fk.sample.core.pluggable.PluggableDemoScreen
+import com.fk.sample.home.SampleGroupScreen
 import com.fk.sample.home.SampleHomeScreen
 import com.fk.ui.theme.FkTheme
 
 /**
- * Sample app entry: grouped catalog hub + per-component demo routes.
+ * Sample app entry: module hub → group list → component demo.
  */
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,15 +42,31 @@ private fun SampleNavHost() {
   ) {
     composable(SampleDestination.HOME) {
       SampleHomeScreen(
+        onOpenGroup = { group ->
+          navController.navigate(group.route)
+        },
+      )
+    }
+    composable(
+      route = "group/{groupId}",
+      arguments = listOf(navArgument("groupId") { type = NavType.StringType }),
+    ) { entry ->
+      val groupId = entry.arguments?.getString("groupId").orEmpty()
+      val group = SampleGroup.entries.firstOrNull { it.name.equals(groupId, ignoreCase = true) }
+        ?: SampleGroup.Core
+      SampleGroupScreen(
+        group = group,
+        onBack = { navController.popBackStack() },
         onOpen = { destination ->
           navController.navigate(destination.route)
         },
       )
     }
     composable(SampleDestination.PLUGGABLE) {
-      PluggableDemoScreen(
-        onBack = { navController.popBackStack() },
-      )
+      PluggableDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.NETWORK) {
+      NetworkDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }

@@ -3,7 +3,7 @@ package com.fk.core.pluggable.networking
 /**
  * Executes HTTP API requests using the host app's networking stack.
  *
- * Production: OkHttp / Ktor (see future `:core` `network` package).
+ * Production: [com.fk.core.network.OkHttpApiClient].
  * Tests / samples: [com.fk.core.pluggable.mock.MockApiClient].
  */
 fun interface ApiClient {
