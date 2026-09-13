@@ -16,6 +16,7 @@ import com.fk.sample.core.logging.LoggingDemoScreen
 import com.fk.sample.core.mapping.MappingDemoScreen
 import com.fk.sample.core.network.NetworkDemoScreen
 import com.fk.sample.core.pluggable.PluggableDemoScreen
+import com.fk.sample.core.security.SecurityDemoScreen
 import com.fk.sample.core.storage.StorageDemoScreen
 import com.fk.sample.home.SampleGroupScreen
 import com.fk.sample.home.SampleHomeScreen
@@ -79,6 +80,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.MAPPING) {
       MappingDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.SECURITY) {
+      SecurityDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }
