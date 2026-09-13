@@ -59,6 +59,7 @@ data class SampleDestination(
     const val I18N = "core/i18n"
     const val PERMISSIONS = "core/permissions"
     const val BIOMETRIC = "core/biometric"
+    const val BACKGROUND = "core/background"
   }
 }
 
@@ -118,6 +119,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "Biometric",
       description = "BiometricPrompt façade: capability / policy / errors",
+    ),
+    SampleDestination(
+      route = SampleDestination.BACKGROUND,
+      group = SampleGroup.Core,
+      title = "Background",
+      description = "WorkManager refresh / processing schedule + observe",
     ),
     SampleDestination(
       route = "ui/theme",

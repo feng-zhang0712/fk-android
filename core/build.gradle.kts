@@ -37,6 +37,7 @@ dependencies {
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.activity.ktx)
   api(libs.androidx.biometric)
+  api(libs.androidx.work.runtime)
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.androidx.datastore.preferences)
   implementation(libs.okhttp.logging)
