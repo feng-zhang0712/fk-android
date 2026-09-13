@@ -17,7 +17,7 @@
 
 - [ ] Local verify: `./gradlew :core:assembleRelease :ui:assembleRelease :business:assembleRelease`
 - [ ] `:sample` updated when **public API** changed (if applicable)
-- [ ] Porting guide consulted / updated when adding a new component area (`docs/component-porting-guide.md`)
+- [ ] Component guide consulted / updated when adding a new component area (`docs/component-guide.md`)
 
 ## New public API
 

@@ -39,7 +39,7 @@ fk-android/
 ├── ui/                   # Compose UI library (depends on :core)
 ├── business/             # business UI library (depends on :ui)
 ├── sample/               # demo application
-├── docs/                 # porting guide and design notes
+├── docs/                 # component guide and design notes
 ├── gradle/libs.versions.toml
 └── settings.gradle.kts
 ```
@@ -103,9 +103,9 @@ dependencies {
 }
 ```
 
-## Porting guide
+## Component guide
 
-Before adding components, read **[docs/component-porting-guide.md](docs/component-porting-guide.md)** — what to encapsulate from FKKit / FKBusinessKit vs what to leave to Android / Material.
+Before adding components, read **[docs/component-guide.md](docs/component-guide.md)** — what to encapsulate from FKKit / FKBusinessKit vs what to leave to Android / Material.
 
 ## Design notes
 
