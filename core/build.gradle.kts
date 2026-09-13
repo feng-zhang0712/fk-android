@@ -35,6 +35,7 @@ dependencies {
   api(libs.okhttp)
 
   implementation(libs.androidx.core.ktx)
+  implementation(libs.androidx.activity.ktx)
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.androidx.datastore.preferences)
   implementation(libs.okhttp.logging)

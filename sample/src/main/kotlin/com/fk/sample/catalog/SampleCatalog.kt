@@ -57,6 +57,7 @@ data class SampleDestination(
     const val MAPPING = "core/mapping"
     const val SECURITY = "core/security"
     const val I18N = "core/i18n"
+    const val PERMISSIONS = "core/permissions"
   }
 }
 
@@ -104,6 +105,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "I18n",
       description = "Runtime locale switch + dictionary + formatters",
+    ),
+    SampleDestination(
+      route = SampleDestination.PERMISSIONS,
+      group = SampleGroup.Core,
+      title = "Permissions",
+      description = "Unified check / request over runtime permissions",
     ),
     SampleDestination(
       route = "ui/theme",
