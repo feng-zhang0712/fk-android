@@ -40,4 +40,5 @@ Concrete adapters: OkHttp → [`network`](../network/README.md); DataStore +
 Keystore → [`storage`](../storage/README.md); Logcat/file →
 [`logging`](../logging/README.md); JSON/envelope →
 [`mapping`](../mapping/README.md). Crypto façade →
-[`security`](../security/README.md). Mocks remain for samples/tests.
+[`security`](../security/README.md). Runtime I18n →
+[`i18n`](../i18n/README.md). Mocks remain for samples/tests.

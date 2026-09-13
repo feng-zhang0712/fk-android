@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.fk.sample.catalog.SampleDestination
 import com.fk.sample.catalog.SampleGroup
+import com.fk.sample.core.i18n.I18nDemoScreen
 import com.fk.sample.core.logging.LoggingDemoScreen
 import com.fk.sample.core.mapping.MappingDemoScreen
 import com.fk.sample.core.network.NetworkDemoScreen
@@ -83,6 +84,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.SECURITY) {
       SecurityDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.I18N) {
+      I18nDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }
