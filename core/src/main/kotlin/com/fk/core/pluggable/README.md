@@ -36,5 +36,5 @@ val services = PluggableServices(
 Prefer injecting individual interfaces into feature modules over passing
 `PluggableServices` everywhere.
 
-Concrete adapters: OkHttp → [`network`](../network/README.md); DataStore-backed
-storage arrives in the later `storage` package. Mocks remain for samples/tests.
+Concrete adapters: OkHttp → [`network`](../network/README.md); DataStore +
+Keystore → [`storage`](../storage/README.md). Mocks remain for samples/tests.
