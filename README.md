@@ -96,7 +96,7 @@ dependencies {
 
 ## Porting guide
 
-Before adding components, read **[docs/component-porting-guide.md](docs/component-porting-guide.md)** — what to encapsulate from FKKit / FKBusinessKit vs what to leave to Android / Material.
+Before adding components, read **[docs/component-porting-guide.md](docs/component-porting-guide.md)**. GitHub About / topics: **[docs/github-about.md](docs/github-about.md)** — what to encapsulate from FKKit / FKBusinessKit vs what to leave to Android / Material.
 
 ## Design notes
 
