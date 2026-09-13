@@ -14,6 +14,7 @@ import com.fk.sample.catalog.SampleDestination
 import com.fk.sample.catalog.SampleGroup
 import com.fk.sample.core.network.NetworkDemoScreen
 import com.fk.sample.core.pluggable.PluggableDemoScreen
+import com.fk.sample.core.storage.StorageDemoScreen
 import com.fk.sample.home.SampleGroupScreen
 import com.fk.sample.home.SampleHomeScreen
 import com.fk.ui.theme.FkTheme
@@ -67,6 +68,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.NETWORK) {
       NetworkDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.STORAGE) {
+      StorageDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }

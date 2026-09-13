@@ -52,6 +52,7 @@ data class SampleDestination(
     const val HOME = "home"
     const val PLUGGABLE = "core/pluggable"
     const val NETWORK = "core/network"
+    const val STORAGE = "core/storage"
   }
 }
 
@@ -69,6 +70,12 @@ object SampleCatalog {
       group = SampleGroup.Core,
       title = "Network",
       description = "OkHttp ApiClient façade over Pluggable contracts",
+    ),
+    SampleDestination(
+      route = SampleDestination.STORAGE,
+      group = SampleGroup.Core,
+      title = "Storage",
+      description = "DataStore key-value + Keystore-encrypted TypedStore",
     ),
     SampleDestination(
       route = "ui/theme",
