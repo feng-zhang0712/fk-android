@@ -65,6 +65,7 @@ data class SampleDestination(
     const val IMAGE = "core/image"
     const val APP = "core/app"
     const val THEME = "ui/theme"
+    const val EMPTY = "ui/empty"
   }
 }
 
@@ -160,6 +161,12 @@ object SampleCatalog {
       group = SampleGroup.Ui,
       title = "Theme",
       description = "Design tokens + FkTheme (color / type / spacing / shadow)",
+    ),
+    SampleDestination(
+      route = SampleDestination.EMPTY,
+      group = SampleGroup.Ui,
+      title = "Empty",
+      description = "Loading / empty / error overlays + resolver",
     ),
     SampleDestination(
       route = "business/comment",
