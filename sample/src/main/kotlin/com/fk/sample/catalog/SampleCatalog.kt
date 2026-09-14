@@ -67,6 +67,7 @@ data class SampleDestination(
     const val THEME = "ui/theme"
     const val EMPTY = "ui/empty"
     const val SKELETON = "ui/skeleton"
+    const val TOAST = "ui/toast"
   }
 }
 
@@ -174,6 +175,12 @@ object SampleCatalog {
       group = SampleGroup.Ui,
       title = "Skeleton",
       description = "Shimmer placeholders + list / card presets",
+    ),
+    SampleDestination(
+      route = SampleDestination.TOAST,
+      group = SampleGroup.Ui,
+      title = "Toast",
+      description = "Unified toast / HUD / snackbar queue",
     ),
     SampleDestination(
       route = "business/comment",

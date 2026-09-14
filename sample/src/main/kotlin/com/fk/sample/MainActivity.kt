@@ -31,6 +31,7 @@ import com.fk.sample.home.SampleHomeScreen
 import com.fk.sample.ui.empty.EmptyDemoScreen
 import com.fk.sample.ui.skeleton.SkeletonDemoScreen
 import com.fk.sample.ui.theme.ThemeDemoScreen
+import com.fk.sample.ui.toast.ToastDemoScreen
 import com.fk.ui.theme.FkTheme
 
 /**
@@ -129,6 +130,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.SKELETON) {
       SkeletonDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.TOAST) {
+      ToastDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }
