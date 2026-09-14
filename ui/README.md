@@ -6,3 +6,4 @@ Public entry: `com.fk.ui.FkUi`, theme: `com.fk.ui.theme.FkTheme`.
 Empty: `com.fk.ui.empty`. Skeleton: `com.fk.ui.skeleton`. Toast: `com.fk.ui.toast`.
 List: `com.fk.ui.list`. TextField: `com.fk.ui.textfield`. Sheet: `com.fk.ui.sheet`.
 Widget: `com.fk.ui.widget` (Avatar / Chip / Tag / StatusPill).
+Flow: `com.fk.ui.flow` (StepIndicator / Timeline).

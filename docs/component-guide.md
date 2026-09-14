@@ -163,7 +163,7 @@ Work **top to bottom**. Finish a phase’s **verify** gate before starting the n
 | G2 | WebView JS bridge | Multiple apps share the same bridge contract |
 | G3 | Widgets (Avatar / Chip / StatusPill) | Brand / list chrome needs shared capsules (`com.fk.ui.widget`) |
 | G4 | QR helpers | Many apps need one shared API (otherwise use ML Kit directly) |
-| G5 | FlowVisualization (StepIndicator / Timeline) | Multi-app shared checkout steps or logistics timeline; else screen-local Compose |
+| G5 | FlowVisualization (StepIndicator / Timeline) | Multi-app shared steps / timelines → `com.fk.ui.flow` (lean) |
 
 ### Suggested milestone map
 
@@ -257,7 +257,7 @@ Material 3 and Compose already cover most commodity controls. Encapsulate **desi
 | **Player / Core** (media orchestration) | Only if products need shared offline, resume, QoE, feed player pool on top of Media3. Drop FairPlay / AirPlay / SharePlay / CarPlay. |
 | **WebView** JS bridge | Only if multiple apps share the same bridge contract; otherwise use WebView / Custom Tabs directly. |
 | **Widgets** (Avatar, Chip, StatusPill, …) | When brand / cell chrome needs shared Avatar / Tag / StatusPill (shipped as `com.fk.ui.widget`; Chip stays a thin Material façade). |
-| **FlowVisualization** (`FKStepIndicator` / `FKTimeline`) | Only if **multiple** apps need the same checkout-step / logistics-timeline chrome and state model. Otherwise build screen-local Compose (Column/Row + theme tokens). Do **not** port the full iOS configuration stack by default. |
+| **FlowVisualization** (`FKStepIndicator` / `FKTimeline`) | Multi-app step / timeline chrome — ship lean `com.fk.ui.flow` (shared models + StepIndicator + Timeline). Skip full iOS configuration / motion / icon stacks. |
 
 ### Skip (use Material / platform)
 
@@ -330,12 +330,12 @@ Before merging a new public API into fk-android:
 
 **Do encapsulate**
 
-Pluggable · Network façade · Storage abstraction · Security façade · Model mapping · Logger · Runtime I18n · Permissions · Biometric / Background / LocalNotification façades · File transfers · ImageLoading contract · App infra (non-UI BusinessKit) · Theme · EmptyState · Skeleton · Toast queue · List orchestration · Form TextField enhancements · CommentKit · TabBarFilter · (optional) Player orchestration · (optional, selective) CellKit rows · (optional) Widgets · (optional) FlowVisualization when multi-app checkout/logistics chrome is required
+Pluggable · Network façade · Storage abstraction · Security façade · Model mapping · Logger · Runtime I18n · Permissions · Biometric / Background / LocalNotification façades · File transfers · ImageLoading contract · App infra (non-UI BusinessKit) · Theme · EmptyState · Skeleton · Toast queue · List orchestration · Form TextField enhancements · CommentKit · TabBarFilter · (optional) Player orchestration · (optional, selective) CellKit rows · Widgets · Flow (`com.fk.ui.flow`)
 
 **Do not encapsulate**
 
-Material commodity controls (Button, Alert, basic Sheet, Badge, Divider, Checkbox, Radio, Progress, Search, Tab, Pager, Carousel) · PhotoPicker · QR · Blur · Keyboard toolkit · bulk Extensions · Base VC system · whole CellKit UI dump · Apple-only features · one-off StepIndicator/Timeline UIs that a single screen can Compose locally
+Material commodity controls (Button, Alert, basic Sheet, Badge, Divider, Checkbox, Radio, Progress, Search, Tab, Pager, Carousel) · PhotoPicker · QR · Blur · Keyboard toolkit · bulk Extensions · Base VC system · whole CellKit UI dump · Apple-only features · full iOS FlowVisualization configuration / motion stacks (use lean `com.fk.ui.flow` instead)
 
 ---
 
-*Last updated: 2026-09-14 — Widgets shipped; FlowVisualization marked optional.*
+*Last updated: 2026-09-14 — Flow (`com.fk.ui.flow`) lean encapsulation.*

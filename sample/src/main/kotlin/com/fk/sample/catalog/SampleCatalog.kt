@@ -72,6 +72,7 @@ data class SampleDestination(
     const val TEXTFIELD = "ui/textfield"
     const val SHEET = "ui/sheet"
     const val WIDGET = "ui/widget"
+    const val FLOW = "ui/flow"
     const val COMMENT = "business/comment"
     const val FILTER = "business/filter"
     const val CELL = "business/cell"
@@ -212,6 +213,12 @@ object SampleCatalog {
       group = SampleGroup.Ui,
       title = "Widget",
       description = "Avatar / Chip / Tag / StatusPill design widgets",
+    ),
+    SampleDestination(
+      route = SampleDestination.FLOW,
+      group = SampleGroup.Ui,
+      title = "Flow",
+      description = "StepIndicator + Timeline (checkout / logistics / audit)",
     ),
     SampleDestination(
       route = SampleDestination.COMMENT,
