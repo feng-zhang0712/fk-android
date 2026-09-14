@@ -28,6 +28,7 @@ import com.fk.sample.core.security.SecurityDemoScreen
 import com.fk.sample.core.storage.StorageDemoScreen
 import com.fk.sample.home.SampleGroupScreen
 import com.fk.sample.home.SampleHomeScreen
+import com.fk.sample.ui.theme.ThemeDemoScreen
 import com.fk.ui.theme.FkTheme
 
 /**
@@ -117,6 +118,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.APP) {
       AppDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.THEME) {
+      ThemeDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }

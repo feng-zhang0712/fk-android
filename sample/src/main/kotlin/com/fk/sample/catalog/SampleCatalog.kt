@@ -64,6 +64,7 @@ data class SampleDestination(
     const val FILE = "core/file"
     const val IMAGE = "core/image"
     const val APP = "core/app"
+    const val THEME = "ui/theme"
   }
 }
 
@@ -155,11 +156,10 @@ object SampleCatalog {
       description = "Version / deeplink / lifecycle / analytics / startup",
     ),
     SampleDestination(
-      route = "ui/theme",
+      route = SampleDestination.THEME,
       group = SampleGroup.Ui,
       title = "Theme",
-      description = "Design tokens + FkTheme (coming soon)",
-      available = false,
+      description = "Design tokens + FkTheme (color / type / spacing / shadow)",
     ),
     SampleDestination(
       route = "business/comment",
