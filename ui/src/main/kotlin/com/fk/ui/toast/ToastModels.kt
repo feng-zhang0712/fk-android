@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 import java.util.UUID
 
 /**
- * Toast package hub — unified queue for toast / HUD / snackbar.
+ * Toast package hub — toast / HUD / snackbar with replace-active presentation.
  *
  * Conceptually aligned with iOS `FKUIKit` Toast (`FKToast` / `FKHUD` / `FKSnackbar`).
  */
@@ -20,7 +20,7 @@ object Toast {
 
 /** Presentation kind. */
 enum class ToastKind {
-  /** Brief centered (or positioned) message. */
+  /** Brief positioned message. */
   Toast,
 
   /** Blocking / centered status or loading HUD. */
@@ -47,22 +47,6 @@ enum class ToastPosition {
   Bottom,
 }
 
-/** How a new item interacts with the active display. */
-enum class ToastPresentationStrategy {
-  /** Finish current, then show next (default). */
-  Sequential,
-
-  /** Replace the currently visible item immediately. */
-  ReplaceActive,
-}
-
-/** Queue knobs for [ToastController]. */
-@Immutable
-data class ToastQueueConfiguration(
-  val maxConcurrent: Int = 1,
-  val presentationStrategy: ToastPresentationStrategy = ToastPresentationStrategy.Sequential,
-)
-
 /**
  * Per-item presentation options.
  *
@@ -88,7 +72,7 @@ data class ToastConfiguration(
 }
 
 /**
- * Enqueue payload.
+ * Show payload.
  *
  * [onAction] is excluded from equals/hashCode (callback identity).
  */

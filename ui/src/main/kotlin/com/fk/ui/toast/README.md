@@ -1,15 +1,15 @@
 # Toast (`com.fk.ui.toast`)
 
-Unified **toast / HUD / snackbar** queue for Compose. Phase **D4**.
+Unified **toast / HUD / snackbar** for Compose. Phase **D4**.
 
-Conceptually aligned with iOS `FKToast` / `FKHUD` / `FKSnackbar` (narrow Compose port).
+Conceptually aligned with iOS `FKToast` / `FKHUD` / `FKSnackbar` (lean Compose port).
 
 ## Layout
 
 | Type | Role |
 |------|------|
 | `Toast` | Package hub + defaults |
-| `ToastController` | Sequential / replace-active queue |
+| `ToastController` | Single-slot replace-active presenter |
 | `ToastHost` / `ToastOverlay` | Compose overlay presenter |
 | `Hud` / `Snackbar` | Convenience façades |
 | `ToastKind` / `ToastStyle` / `ToastPosition` | Presentation model |
@@ -26,14 +26,11 @@ ToastHost(controller) {
 controller.show("Hello", style = ToastStyle.Info)
 Hud.showLoading(controller, "Saving…")
 Snackbar.show(controller, "Archived", actionLabel = "Undo")
-
-// Burst queue (verify gate):
-repeat(5) { i -> controller.show("Queue #$i", style = ToastStyle.Info) }
 ```
 
 ## Notes
 
-- Default queue is sequential with `maxConcurrent = 1`.
+- Only **one** toast is visible; a new `show` / `enqueue` **replaces** the active item (no pending queue).
 - HUD loading uses `durationMs = 0` + `timeoutMs` and can intercept touches.
 - Snackbar defaults to bottom + 4s duration; body tap does not dismiss (action / timeout / `dismiss` do).
 - `Snackbar.show(..., onAction = { })` runs after dismiss when the action is pressed.

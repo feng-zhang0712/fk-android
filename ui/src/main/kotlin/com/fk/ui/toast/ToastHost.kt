@@ -75,8 +75,8 @@ fun ToastHost(
 fun BoxScope.ToastOverlay(
   controller: ToastController,
 ) {
-  val entries = controller.visible.toList()
-  val blocking = entries.any { it.request.configuration.interceptTouches }
+  val entry = controller.current
+  val blocking = entry?.request?.configuration?.interceptTouches == true
   if (blocking) {
     Box(
       modifier = Modifier
@@ -90,39 +90,39 @@ fun BoxScope.ToastOverlay(
     )
   }
 
-  entries.forEach { entry ->
-    val position = entry.request.configuration.resolvedPosition()
-    val alignment = when (position) {
-      ToastPosition.Top -> Alignment.TopCenter
-      ToastPosition.Center -> Alignment.Center
-      ToastPosition.Bottom -> Alignment.BottomCenter
-    }
-    val insetModifier = when (position) {
-      ToastPosition.Top -> Modifier.statusBarsPadding()
-      ToastPosition.Bottom -> Modifier.navigationBarsPadding()
-      ToastPosition.Center -> Modifier
-    }
-    AnimatedVisibility(
-      visible = true,
-      enter = when (entry.request.configuration.kind) {
-        ToastKind.Snackbar -> slideInVertically { it } + fadeIn()
-        else -> fadeIn() + scaleIn(initialScale = 0.92f)
-      },
-      modifier = Modifier
-        .align(alignment)
-        .then(insetModifier)
-        .padding(fkMetrics().spacingM),
+  if (entry == null) return
+
+  val position = entry.request.configuration.resolvedPosition()
+  val alignment = when (position) {
+    ToastPosition.Top -> Alignment.TopCenter
+    ToastPosition.Center -> Alignment.Center
+    ToastPosition.Bottom -> Alignment.BottomCenter
+  }
+  val insetModifier = when (position) {
+    ToastPosition.Top -> Modifier.statusBarsPadding()
+    ToastPosition.Bottom -> Modifier.navigationBarsPadding()
+    ToastPosition.Center -> Modifier
+  }
+  AnimatedVisibility(
+    visible = true,
+    enter = when (entry.request.configuration.kind) {
+      ToastKind.Snackbar -> slideInVertically { it } + fadeIn()
+      else -> fadeIn() + scaleIn(initialScale = 0.92f)
+    },
+    modifier = Modifier
+      .align(alignment)
+      .then(insetModifier)
+      .padding(fkMetrics().spacingM),
+  ) {
+    Box(
+      modifier = Modifier.fillMaxWidth(),
+      contentAlignment = Alignment.Center,
     ) {
-      Box(
-        modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center,
-      ) {
-        ToastCard(
-          entry = entry,
-          onDismiss = { controller.dismiss(entry.request.id) },
-          onAction = { controller.invokeAction(entry.request.id) },
-        )
-      }
+      ToastCard(
+        entry = entry,
+        onDismiss = { controller.dismiss(entry.request.id) },
+        onAction = { controller.invokeAction(entry.request.id) },
+      )
     }
   }
 }

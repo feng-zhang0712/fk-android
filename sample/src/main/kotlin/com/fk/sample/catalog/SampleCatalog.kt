@@ -188,7 +188,7 @@ object SampleCatalog {
       route = SampleDestination.TOAST,
       group = SampleGroup.Ui,
       title = "Toast",
-      description = "Unified toast / HUD / snackbar queue",
+      description = "Replace-active toast / HUD / snackbar",
     ),
     SampleDestination(
       route = SampleDestination.LIST,

@@ -31,16 +31,13 @@ import com.fk.ui.toast.Hud
 import com.fk.ui.toast.Snackbar
 import com.fk.ui.toast.Toast
 import com.fk.ui.toast.ToastHost
-import com.fk.ui.toast.ToastKind
-import com.fk.ui.toast.ToastPresentationStrategy
-import com.fk.ui.toast.ToastQueueConfiguration
 import com.fk.ui.toast.ToastStyle
 import com.fk.ui.toast.rememberToastController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
- * Smoke demo for Phase D4 toast (queue / HUD / snackbar).
+ * Smoke demo for Phase D4 toast (replace-active / HUD / snackbar).
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -49,10 +46,7 @@ fun ToastDemoScreen(
 ) {
   val metrics = fkMetrics()
   val scope = rememberCoroutineScope()
-  var strategy by remember { mutableStateOf(ToastPresentationStrategy.Sequential) }
-  val controller = rememberToastController(
-    ToastQueueConfiguration(presentationStrategy = strategy),
-  )
+  val controller = rememberToastController()
   var lastHandle by remember { mutableStateOf("—") }
 
   ToastHost(controller = controller) {
@@ -69,36 +63,15 @@ fun ToastDemoScreen(
       ) {
         Text("Toast package v${Toast.VERSION}", style = fkTextStyle(FkTextStyle.Footnote))
         Text(
-          "Unified queue · HUD · snackbar · pending=${controller.pendingCount}",
+          "Single-slot replace-active · HUD · snackbar",
           style = fkTextStyle(FkTextStyle.Caption1),
           color = fkColor(FkColorRole.OnSurfaceSecondary),
         )
         Text(
-          "Last handle: $lastHandle",
+          "Last handle: $lastHandle · active=${controller.current != null}",
           style = fkTextStyle(FkTextStyle.Caption1),
           color = fkColor(FkColorRole.OnSurfaceSecondary),
         )
-        HorizontalDivider()
-
-        Text("Queue strategy", style = fkTextStyle(FkTextStyle.Subheadline))
-        FlowRow(
-          horizontalArrangement = Arrangement.spacedBy(metrics.spacingXs),
-          verticalArrangement = Arrangement.spacedBy(metrics.spacingXs),
-        ) {
-          ToastPresentationStrategy.entries.forEach { entry ->
-            FilterChip(
-              selected = strategy == entry,
-              onClick = { strategy = entry },
-              label = { Text(entry.name) },
-            )
-          }
-        }
-        Text(
-          "Strategy applies immediately (controller recreated on change).",
-          style = fkTextStyle(FkTextStyle.Caption2),
-          color = fkColor(FkColorRole.OnSurfaceSecondary),
-        )
-
         HorizontalDivider()
 
         Button(
@@ -106,9 +79,8 @@ fun ToastDemoScreen(
             scope.launch {
               repeat(5) { index ->
                 val handle = controller.show(
-                  message = "Queue message #${index + 1}",
+                  message = "Burst #${index + 1} (replaces previous)",
                   style = ToastStyle.Info,
-                  kind = ToastKind.Toast,
                 )
                 lastHandle = handle.id.take(8)
                 delay(120)
@@ -117,7 +89,7 @@ fun ToastDemoScreen(
           },
           modifier = Modifier.fillMaxWidth(),
         ) {
-          Text("Enqueue 5 toasts (burst)")
+          Text("Burst 5 toasts (replace-active)")
         }
 
         Button(
@@ -173,10 +145,10 @@ fun ToastDemoScreen(
         }
 
         Button(
-          onClick = { controller.clearAll() },
+          onClick = { controller.clear() },
           modifier = Modifier.fillMaxWidth(),
         ) {
-          Text("Clear all")
+          Text("Clear")
         }
       }
     }

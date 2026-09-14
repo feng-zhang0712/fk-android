@@ -135,7 +135,7 @@ Work **top to bottom**. Finish a phase’s **verify** gate before starting the n
 | D1 | `theme` | Theme | Color / typography / spacing / shape tokens; `FkTheme` | Sample themed screen |
 | D2 | `empty` | EmptyState | Loading / empty / error overlays | Toggle states in sample |
 | D3 | `skeleton` | Skeleton | Shimmer / placeholder patterns | Skeleton on a list placeholder |
-| D4 | `toast` | Toast / HUD / Snackbar | Unified queue + HUD + snackbar styling | Enqueue multiple toasts |
+| D4 | `toast` | Toast / HUD / Snackbar | Replace-active toast + HUD + snackbar styling | Show styles / HUD / snackbar in sample |
 
 **Do not** implement Material clones (Button, Alert, Checkbox, …) in this phase.
 
@@ -244,7 +244,7 @@ Material 3 and Compose already cover most commodity controls. Encapsulate **desi
 | **Theme** | `com.fk.ui.theme` | Design tokens (color / type / spacing / shadow) and component defaults — required for multi-app consistency. |
 | **EmptyState** | `com.fk.ui.empty` | No standard Material “loading / empty / error” overlay kit; list screens need it constantly. |
 | **Skeleton** | `com.fk.ui.skeleton` | No platform skeleton standard; shared shimmer / placeholder is valuable. |
-| **Toast / HUD / Snackbar queue** | `com.fk.ui.toast` | Snackbar / Toast exist; unify queue, HUD, and styling. |
+| **Toast / HUD / Snackbar** | `com.fk.ui.toast` | Snackbar / Toast exist; unify HUD, positions, semantic styles (replace-active, no multi-queue). |
 | **ListKit** (orchestration pattern) | `com.fk.ui.list` | Diff + sections + refresh + empty/skeleton orchestration — wrap the **scenario**, not `UITableView` APIs. |
 | **TextField** (form capabilities) | `com.fk.ui.textfield` | Skip basic TextField; wrap formatting, validation, OTP, counters. |
 | **Sheet** (product-level) | `com.fk.ui.sheet` | ModalBottomSheet covers basics; wrap only if you need iOS-parity multi-detent / anchor / keyboard behavior as a product API. |
@@ -330,7 +330,7 @@ Before merging a new public API into fk-android:
 
 **Do encapsulate**
 
-Pluggable · Network façade · Storage abstraction · Security façade · Model mapping · Logger · Runtime I18n · Permissions · Biometric / Background / LocalNotification façades · File transfers · ImageLoading contract · App infra (non-UI BusinessKit) · Theme · EmptyState · Skeleton · Toast queue · List orchestration · Form TextField enhancements · CommentKit · TabBarFilter · (optional) Player orchestration · (optional, selective) CellKit rows · Widgets · Flow (`com.fk.ui.flow`)
+Pluggable · Network façade · Storage abstraction · Security façade · Model mapping · Logger · Runtime I18n · Permissions · Biometric / Background / LocalNotification façades · File transfers · ImageLoading contract · App infra (non-UI BusinessKit) · Theme · EmptyState · Skeleton · Toast / HUD / Snackbar · List orchestration · Form TextField enhancements · CommentKit · TabBarFilter · (optional) Player orchestration · (optional, selective) CellKit rows · Widgets · Flow (`com.fk.ui.flow`)
 
 **Do not encapsulate**
 

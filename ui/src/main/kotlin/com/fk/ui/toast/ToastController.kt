@@ -4,11 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -18,29 +16,23 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.util.ArrayDeque
 
 /**
- * In-memory toast queue (sequential by default).
+ * Single-slot toast presenter: a new show **replaces** the active item.
  *
- * Conceptually aligned with iOS `FKToast` queue actor semantics (narrow subset).
+ * Conceptually aligned with iOS `FKToast` (lean Compose subset — no multi-item queue).
  *
  * Call [dispose] when the host leaves composition (see [rememberToastController]).
  */
 @Stable
 class ToastController(
-  private val queueConfiguration: ToastQueueConfiguration = ToastQueueConfiguration(),
   private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate),
 ) {
   private val mutex = Mutex()
-  private val pending = ArrayDeque<ToastRequest>()
-  private val dismissJobs = mutableMapOf<String, Job>()
+  private var dismissJob: Job? = null
 
-  /** Currently visible entries (usually 0..[ToastQueueConfiguration.maxConcurrent]). */
-  val visible: SnapshotStateList<ToastEntry> = mutableStateListOf()
-
-  /** Pending queue size (not yet on screen). Observable for Compose. */
-  var pendingCount by mutableIntStateOf(0)
+  /** Currently visible entry, or `null` when idle. */
+  var current: ToastEntry? by mutableStateOf(null)
     private set
 
   fun show(
@@ -68,26 +60,7 @@ class ToastController(
   fun enqueue(request: ToastRequest): ToastHandle {
     scope.launch {
       mutex.withLock {
-        when (queueConfiguration.presentationStrategy) {
-          ToastPresentationStrategy.ReplaceActive -> {
-            if (visible.isNotEmpty()) {
-              val activeIds = visible.map { it.request.id }
-              visible.clear()
-              activeIds.forEach { cancelDismissJob(it) }
-            }
-            pending.clear()
-            syncPendingCount()
-            presentLocked(request)
-          }
-          ToastPresentationStrategy.Sequential -> {
-            if (visible.size < queueConfiguration.maxConcurrent.coerceAtLeast(1)) {
-              presentLocked(request)
-            } else {
-              pending.addLast(request)
-              syncPendingCount()
-            }
-          }
-        }
+        presentLocked(request)
       }
     }
     return ToastHandle(request.id)
@@ -96,22 +69,19 @@ class ToastController(
   fun dismiss(id: String) {
     scope.launch {
       mutex.withLock {
-        dismissLocked(id)
-        pumpLocked()
+        if (current?.request?.id == id) {
+          clearLocked()
+        }
       }
     }
   }
 
   fun dismiss(handle: ToastHandle) = dismiss(handle.id)
 
-  fun clearAll() {
+  fun clear() {
     scope.launch {
       mutex.withLock {
-        val ids = visible.map { it.request.id } + pending.map { it.id }
-        visible.clear()
-        pending.clear()
-        syncPendingCount()
-        ids.forEach { cancelDismissJob(it) }
+        clearLocked()
       }
     }
   }
@@ -119,55 +89,36 @@ class ToastController(
   fun invokeAction(id: String) {
     scope.launch {
       val action = mutex.withLock {
-        val entry = visible.firstOrNull { it.request.id == id }
-        val callback = entry?.request?.onAction
-        dismissLocked(id)
-        pumpLocked()
+        val entry = current
+        if (entry?.request?.id != id) return@withLock null
+        val callback = entry.request.onAction
+        clearLocked()
         callback
       }
       action?.invoke()
     }
   }
 
-  /** Cancels pending work and clears the queue. */
+  /** Cancels timers and clears the active toast. */
   fun dispose() {
-    dismissJobs.values.forEach { it.cancel() }
-    dismissJobs.clear()
-    visible.clear()
-    pending.clear()
-    pendingCount = 0
+    dismissJob?.cancel()
+    dismissJob = null
+    current = null
     scope.cancel()
   }
 
   private fun presentLocked(request: ToastRequest) {
-    visible += ToastEntry(request = request)
+    cancelDismissJob()
+    current = ToastEntry(request = request)
     scheduleAutoDismiss(request)
   }
 
-  private fun dismissLocked(id: String) {
-    cancelDismissJob(id)
-    visible.removeAll { it.request.id == id }
-    pending.removeAll { it.id == id }
-    syncPendingCount()
-  }
-
-  private fun pumpLocked() {
-    val capacity = queueConfiguration.maxConcurrent.coerceAtLeast(1) - visible.size
-    if (capacity <= 0) return
-    repeat(capacity) {
-      if (pending.isEmpty()) return
-      val next = pending.removeFirst()
-      syncPendingCount()
-      presentLocked(next)
-    }
-  }
-
-  private fun syncPendingCount() {
-    pendingCount = pending.size
+  private fun clearLocked() {
+    cancelDismissJob()
+    current = null
   }
 
   private fun scheduleAutoDismiss(request: ToastRequest) {
-    cancelDismissJob(request.id)
     val duration = request.configuration.durationMs
     val timeout = request.configuration.timeoutMs
     val delayMs = when {
@@ -175,28 +126,26 @@ class ToastController(
       timeout != null && timeout > 0L -> timeout
       else -> return
     }
-    dismissJobs[request.id] = scope.launch {
+    dismissJob = scope.launch {
       delay(delayMs)
       mutex.withLock {
-        dismissLocked(request.id)
-        pumpLocked()
+        if (current?.request?.id == request.id) {
+          clearLocked()
+        }
       }
     }
   }
 
-  private fun cancelDismissJob(id: String) {
-    dismissJobs.remove(id)?.cancel()
+  private fun cancelDismissJob() {
+    dismissJob?.cancel()
+    dismissJob = null
   }
 }
 
 /** Remembers a [ToastController] and disposes it when leaving composition / config change. */
 @Composable
-fun rememberToastController(
-  queueConfiguration: ToastQueueConfiguration = ToastQueueConfiguration(),
-): ToastController {
-  val controller = remember(queueConfiguration) {
-    ToastController(queueConfiguration = queueConfiguration)
-  }
+fun rememberToastController(): ToastController {
+  val controller = remember { ToastController() }
   DisposableEffect(controller) {
     onDispose { controller.dispose() }
   }
