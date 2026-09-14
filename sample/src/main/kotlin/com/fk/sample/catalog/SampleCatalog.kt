@@ -71,6 +71,7 @@ data class SampleDestination(
     const val LIST = "ui/list"
     const val TEXTFIELD = "ui/textfield"
     const val SHEET = "ui/sheet"
+    const val COMMENT = "business/comment"
   }
 }
 
@@ -204,11 +205,10 @@ object SampleCatalog {
       description = "Multi-detent bottom sheet + center card",
     ),
     SampleDestination(
-      route = "business/comment",
+      route = SampleDestination.COMMENT,
       group = SampleGroup.Business,
       title = "Comment",
-      description = "Comment list + composer (coming soon)",
-      available = false,
+      description = "Comment list + composer (flat replyTo, optimistic like)",
     ),
   )
 

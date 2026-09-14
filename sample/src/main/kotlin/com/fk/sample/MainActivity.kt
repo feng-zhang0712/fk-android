@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.fk.sample.catalog.SampleDestination
 import com.fk.sample.catalog.SampleGroup
+import com.fk.sample.business.comment.CommentDemoScreen
 import com.fk.sample.core.app.AppDemoScreen
 import com.fk.sample.core.background.BackgroundDemoScreen
 import com.fk.sample.core.biometric.BiometricDemoScreen
@@ -145,6 +146,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.SHEET) {
       SheetDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.COMMENT) {
+      CommentDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }
