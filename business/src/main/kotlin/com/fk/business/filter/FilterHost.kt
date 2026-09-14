@@ -1,10 +1,10 @@
 package com.fk.business.filter
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -21,8 +21,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -38,8 +43,12 @@ import com.fk.ui.theme.fkTextStyle
  * Filter strip + expandable panel host over [content].
  *
  * Conceptually aligned with iOS `FKTabBarFilterController` (Compose overlay,
- * not UIKit anchored sheet). Place this at a screen-root container so the
- * scrim covers the list / page body, not only the strip.
+ * not UIKit anchored sheet). Panel enter/exit uses **vertical offset**
+ * (`slideInVertically` / `slideOutVertically`) clipped to the region below the
+ * strip, so the panel emerges from / retreats into the strip bottom edge.
+ *
+ * Place this at a screen-root container so the scrim covers the list / page
+ * body, not only the strip.
  *
  * @param panelContents Host-owned panel payloads keyed by tab id.
  * @param onPanelContentChange Called when a built-in panel mutates its model.
@@ -60,6 +69,12 @@ fun FilterHost(
   val strings = controller.configuration.strings
   val expandedId = controller.expandedTabId
   val expandedTab = controller.tabs.firstOrNull { it.id == expandedId }
+  // Keep the last expanded tab while exit animation runs (otherwise content
+  // becomes null immediately and the panel appears to vanish).
+  var presentedTab by remember { mutableStateOf<FilterTab?>(null) }
+  if (expandedTab != null) {
+    presentedTab = expandedTab
+  }
 
   BackHandler(enabled = controller.isExpanded) {
     controller.collapse(FilterDismissReason.SystemBack)
@@ -90,13 +105,20 @@ fun FilterHost(
               .clickable { controller.collapse(FilterDismissReason.Backdrop) },
           )
         }
-        Box(modifier = Modifier.align(Alignment.TopCenter).fillMaxWidth()) {
+        // Clip so offset slide never paints over the strip; motion reads as
+        // emerging from / sliding into the strip bottom (anchor edge).
+        Box(
+          modifier = Modifier
+            .align(Alignment.TopCenter)
+            .fillMaxWidth()
+            .clipToBounds(),
+        ) {
           androidx.compose.animation.AnimatedVisibility(
             visible = expanded,
-            enter = expandVertically(expandFrom = Alignment.Top) + fadeIn(),
-            exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut(),
+            enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
+            exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
           ) {
-            val tab = expandedTab
+            val tab = presentedTab
             if (tab != null) {
               val panelContent = panelContents[tab.id]
               val usesFixedTwoColumnHeight = panelContent is FilterPanelContent.Hierarchy ||
