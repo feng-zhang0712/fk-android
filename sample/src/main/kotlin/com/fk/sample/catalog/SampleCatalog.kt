@@ -72,6 +72,7 @@ data class SampleDestination(
     const val TEXTFIELD = "ui/textfield"
     const val SHEET = "ui/sheet"
     const val COMMENT = "business/comment"
+    const val FILTER = "business/filter"
   }
 }
 
@@ -209,6 +210,12 @@ object SampleCatalog {
       group = SampleGroup.Business,
       title = "Comment",
       description = "Comment list + composer (flat replyTo, optimistic like)",
+    ),
+    SampleDestination(
+      route = SampleDestination.FILTER,
+      group = SampleGroup.Business,
+      title = "Filter",
+      description = "Tab strip + hierarchy / dual / tags / list panels",
     ),
   )
 

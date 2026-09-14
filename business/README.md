@@ -4,3 +4,4 @@ Business UI library (`com.fk.android:business`). Depends on `:ui`. Aligned with 
 
 Public entry: `com.fk.business.FkBusiness`.
 Comment: `com.fk.business.comment`.
+Filter: `com.fk.business.filter`.
