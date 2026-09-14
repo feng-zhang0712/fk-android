@@ -39,7 +39,11 @@ afterEvaluate {
     publications {
       register<MavenPublication>("release") {
         from(components["release"])
-        groupId = providers.gradleProperty("FK_GROUP_ID").get()
+        groupId = if (System.getenv("JITPACK") == "true") {
+          "com.github.feng-zhang0712.fk-android"
+        } else {
+          providers.gradleProperty("FK_GROUP_ID").get()
+        }
         artifactId = "ui"
         version = providers.gradleProperty("FK_VERSION_NAME").get()
         pom {

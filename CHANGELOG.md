@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 for library coordinates (`com.fk.android:*`). Versions in the **0.x** line may include
 breaking API changes without a major bump.
 
+## [0.1.1] - 2026-09-14
+
+### Added
+
+- JitPack remote install from Git tags (`jitpack.yml`, JDK 17, `publishLibrariesToMavenLocal`)
+- JitPack-aware Maven `groupId` so multi-module transitive POMs resolve for consumers
+- Docs: document Git-tag / JitPack install as the open-source path (SPM-like)
+
+### Changed
+
+- Recommend JitPack coordinates for host apps; keep `com.fk.android` for local / GitHub Packages / future Maven Central
+
 ## [0.1.0] - 2026-09-14
 
 First public release of the fk-android library modules.

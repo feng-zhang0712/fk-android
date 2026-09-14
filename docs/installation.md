@@ -1,144 +1,144 @@
 # Installation & Consumption
 
-How host Android apps depend on **fk-android**.
+How host Android apps depend on **fk-android** from a **remote Git release** (same idea as installing an iOS package from a Git tag).
 
-Library version is defined once in [`gradle.properties`](../gradle.properties) as `FK_VERSION_NAME` (currently **0.1.0**). Maven `groupId` is `FK_GROUP_ID` = **`com.fk.android`**.
-
-**Recommended production path:** publish AARs to a Maven repository, then consume them with Gradle coordinates.
+Library version is `FK_VERSION_NAME` in [`gradle.properties`](../gradle.properties) (currently **0.1.1**). Git tags use the **same** string (**no `v` prefix**), e.g. `0.1.1`.
 
 ```text
 :business  →  :ui  →  :core
 
-Host app typically depends on the highest module it needs:
-  implementation("com.fk.android:business:<version>")  // pulls ui + core via api()
-  // or only:
-  implementation("com.fk.android:ui:<version>")
-  implementation("com.fk.android:core:<version>")
+Prefer depending on the highest module you need:
+  implementation("…:business:<version>")  // pulls ui + core via api()
 ```
 
 `:sample` is a demo app only — **not** published.
 
 ---
 
+## iOS SPM → Android (mental model)
+
+| iOS | Android (this repo) |
+|-----|---------------------|
+| Add package from GitHub URL | Add the **JitPack** Maven repository |
+| Resolve a **Git tag** | Use that **tag** as the dependency version |
+| Link a product | `implementation("group:artifact:tag")` |
+
+Open-source path today: **GitHub tag → [JitPack](https://jitpack.io) builds AARs → your app downloads them.**  
+No local install required. Anyone with network access can depend on the library.
+
+Longer term, the same artifacts can also be published to **Maven Central** under `com.fk.android` (see [releasing.md](releasing.md)). Until then, use JitPack coordinates below.
+
+---
+
 ## Artifacts
 
-| Gradle module | Maven coordinate | Contents |
-|---------------|------------------|----------|
-| `:core` | `com.fk.android:core` | Foundation (network, storage, pluggable, …) |
-| `:ui` | `com.fk.android:ui` | Theme + Compose UI kits |
-| `:business` | `com.fk.android:business` | Comment, filter, cell rows |
+| Gradle module | JitPack coordinate (Git tag install) | Future Maven Central |
+|---------------|--------------------------------------|----------------------|
+| `:core` | `com.github.feng-zhang0712.fk-android:core` | `com.fk.android:core` |
+| `:ui` | `com.github.feng-zhang0712.fk-android:ui` | `com.fk.android:ui` |
+| `:business` | `com.github.feng-zhang0712.fk-android:business` | `com.fk.android:business` |
 
 ---
 
-## Option A — Maven coordinate (recommended for apps)
+## Recommended — install from Git tag (JitPack)
 
-Use this once artifacts are published (Maven Central, company Nexus/Artifactory, or GitHub Packages).
+Closest to “Add Package Dependency” from a Git repo on iOS.
 
-### 1. Repository
-
-**Maven Central** (when published there):
+### 1. Add the JitPack repository
 
 ```kotlin
 // settings.gradle.kts
 dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
     google()
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
   }
 }
 ```
 
-**GitHub Packages:**
+### 2. Add the dependency
 
 ```kotlin
-// settings.gradle.kts
-dependencyResolutionManagement {
-  repositories {
-    google()
-    mavenCentral()
-    maven {
-      url = uri("https://maven.pkg.github.com/feng-zhang0712/fk-android")
-      credentials {
-        username = providers.gradleProperty("gpr.user").orNull
-          ?: System.getenv("GITHUB_ACTOR")
-        password = providers.gradleProperty("gpr.key").orNull
-          ?: System.getenv("GITHUB_TOKEN")
-      }
-    }
-  }
-}
-```
-
-Host `~/.gradle/gradle.properties` (or CI secrets):
-
-```properties
-gpr.user=YOUR_GITHUB_USERNAME
-gpr.key=YOUR_GITHUB_PAT
-```
-
-The PAT needs at least `read:packages` (and `write:packages` when publishing).
-
-### 2. Dependencies
-
-```kotlin
-// app/build.gradle.kts
+// app (or feature) build.gradle.kts
 dependencies {
-  // Prefer the top module you need — api() edges pull transitive modules.
-  implementation("com.fk.android:business:0.1.0")
+  // Version = Git tag on https://github.com/feng-zhang0712/fk-android
+  implementation("com.github.feng-zhang0712.fk-android:business:0.1.1")
 
-  // Or pick layers explicitly:
-  // implementation("com.fk.android:core:0.1.0")
-  // implementation("com.fk.android:ui:0.1.0")
+  // Or layer explicitly:
+  // implementation("com.github.feng-zhang0712.fk-android:core:0.1.1")
+  // implementation("com.github.feng-zhang0712.fk-android:ui:0.1.1")
 }
 ```
 
-Host apps still need their own Compose / Material3 BOM and `FkTheme` usage as documented by each package README.
+### 3. First sync tip
+
+The **first** resolve of a new tag may take a few minutes while JitPack builds from source. Check build status:
+
+- Repo lookup: [https://jitpack.io/#feng-zhang0712/fk-android](https://jitpack.io/#feng-zhang0712/fk-android)
+- Direct log (example): `https://jitpack.io/com/github/feng-zhang0712/fk-android/business/0.1.1/build.log`
+
+Host apps still need their own Compose / Material3 BOM. Wrap UI from `:ui` / `:business` in `FkTheme` as described in package READMEs.
 
 ---
 
-## Option B — `mavenLocal()` (local install)
+## Alternative — Maven Central (`com.fk.android`)
 
-Useful while developing fk-android and verifying a host app without publishing remotely.
+When Central publishing is enabled (see [releasing.md](releasing.md)):
 
-### 1. Publish from this repo
+```kotlin
+repositories {
+  google()
+  mavenCentral()
+}
+
+dependencies {
+  implementation("com.fk.android:business:0.1.1")
+}
+```
+
+No JitPack repo needed. Prefer this once available — stable coordinates for open source.
+
+---
+
+## Alternative — GitHub Packages
+
+Works for GitHub-hosted packages but **often requires a GitHub token even to download**, which is awkward for public open-source consumers. Prefer JitPack or Maven Central for public apps.
+
+```kotlin
+maven {
+  url = uri("https://maven.pkg.github.com/feng-zhang0712/fk-android")
+  credentials {
+    username = providers.gradleProperty("gpr.user").orNull
+      ?: System.getenv("GITHUB_ACTOR")
+    password = providers.gradleProperty("gpr.key").orNull
+      ?: System.getenv("GITHUB_TOKEN")
+  }
+}
+```
+
+```kotlin
+implementation("com.fk.android:business:0.1.1")
+```
+
+---
+
+## Maintainer / CI only — local `mavenLocal()`
+
+For library authors debugging publish output on one machine (not for app teams):
 
 ```bash
 ./scripts/publish-local.sh
-# equivalent:
-# ./gradlew :core:publishToMavenLocal :ui:publishToMavenLocal :business:publishToMavenLocal
 ```
 
-Artifacts land under `~/.m2/repository/com/fk/android/`.
-
-### 2. Consume from the host app
-
-```kotlin
-// settings.gradle.kts
-dependencyResolutionManagement {
-  repositories {
-    google()
-    mavenCentral()
-    mavenLocal()
-  }
-}
-```
-
-```kotlin
-// app/build.gradle.kts
-dependencies {
-  implementation("com.fk.android:business:0.1.0")
-}
-```
-
-Bump `FK_VERSION_NAME` before publishing if you need to invalidate a cached local version.
+Then temporarily add `mavenLocal()` in the host app. Prefer JitPack for normal integration.
 
 ---
 
-## Option C — Composite build / source (monorepo or sibling checkout)
+## Composite build / source (monorepo)
 
-When the host app and fk-android live side by side (or in one repo):
-
-### Composite build (`includeBuild`)
+When the host app and this repo live side by side during development:
 
 ```kotlin
 // host settings.gradle.kts
@@ -151,77 +151,26 @@ includeBuild("../fk-android") {
 }
 ```
 
-```kotlin
-// host app/build.gradle.kts
-dependencies {
-  implementation("com.fk.android:business") // resolved to included build
-}
-```
-
-### Multi-module `project()` (same Gradle build)
-
-```kotlin
-// settings.gradle.kts
-include(":core")
-include(":ui")
-include(":business")
-// point projectDir at the fk-android modules if needed
-```
-
-```kotlin
-dependencies {
-  implementation(project(":business"))
-}
-```
-
 ---
 
-## Option D — JitPack (GitHub → AAR)
-
-Convenient for early integration from a public Git tag. Prefer Options A/B for production once coordinates are stable.
-
-1. Use a release tag such as `0.1.0` (no `v` prefix).
-2. In the host app:
-
-```kotlin
-// settings.gradle.kts
-dependencyResolutionManagement {
-  repositories {
-    google()
-    mavenCentral()
-    maven { url = uri("https://jitpack.io") }
-  }
-}
-```
-
-JitPack coordinates follow the GitHub path (not `com.fk.android`). Prefer `publishToMavenLocal` or a real Maven host until a dedicated JitPack module layout is documented.
-
----
-
-## Versioning & release
+## Versioning
 
 - **0.x** = public API may still change; pin exact versions in apps.
-- Bump `FK_VERSION_NAME` in `gradle.properties` for each release.
-- Tag Git with the same version string (**no `v` prefix**), e.g. `0.1.0`, on `main` after merging from `develop`.
-- Publish AARs (`./scripts/publish-local.sh` or `./scripts/publish-github-packages.sh`), then announce coordinates + [CHANGELOG.md](../CHANGELOG.md).
-- Keep `:sample` green:
+- Bump `FK_VERSION_NAME`, update [CHANGELOG.md](../CHANGELOG.md), merge to `main`, tag **without** `v` (e.g. `0.1.1`).
+- JitPack builds from that tag automatically on first consumer request (or when you open the JitPack page and click **Get** / **Look up**).
 
-```bash
-./gradlew :business:assembleRelease :sample:assembleDebug
-```
-
-See [releasing.md](releasing.md) for the full release checklist.
+See [releasing.md](releasing.md).
 
 ---
 
 ## ProGuard / R8
 
-Each library ships `consumer-rules.pro`. Host apps using R8 full mode should keep those consumer rules (Gradle merges them automatically for `implementation` dependencies).
+Each library ships `consumer-rules.pro`. Gradle merges consumer rules for `implementation` dependencies automatically.
 
 ---
 
 ## See also
 
-- Root [README.md](../README.md) — modules overview
-- [releasing.md](releasing.md) — publish & tag workflow
-- Per-package `README.md` under `core/`, `ui/`, `business/` sources
+- Root [README.md](../README.md)
+- [releasing.md](releasing.md)
+- Per-package `README.md` under `core/`, `ui/`, `business/`

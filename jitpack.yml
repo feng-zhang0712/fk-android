@@ -1,0 +1,9 @@
+jdk:
+  - openjdk17
+before_install:
+  # Ensure Android SDK components used by AGP are present (JitPack images vary).
+  - mkdir -p $HOME/.android
+  - echo "sdk.dir=$ANDROID_HOME" > local.properties
+install:
+  # Publish only library modules (skip :sample).
+  - ./gradlew publishLibrariesToMavenLocal --stacktrace -Dorg.gradle.jvmargs="-Xmx2g -Dfile.encoding=UTF-8"

@@ -9,11 +9,7 @@ VERSION="$(grep -E '^FK_VERSION_NAME=' gradle.properties | cut -d= -f2-)"
 GROUP="$(grep -E '^FK_GROUP_ID=' gradle.properties | cut -d= -f2-)"
 
 echo "==> Publishing ${GROUP}:{core,ui,business}:${VERSION} to mavenLocal()"
-./gradlew \
-  :core:publishToMavenLocal \
-  :ui:publishToMavenLocal \
-  :business:publishToMavenLocal \
-  "$@"
+./gradlew publishLibrariesToMavenLocal "$@"
 
 echo "==> Done. Artifacts under ~/.m2/repository/${GROUP//.//}/"
 echo "    Add mavenLocal() to the host app repositories, then:"
