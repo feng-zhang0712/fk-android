@@ -4,9 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
@@ -17,10 +18,13 @@ import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.fk.ui.theme.FkColorRole
@@ -173,22 +177,30 @@ fun FkTag(
 ) {
   val metrics = fkMetrics()
   val (bg, border, fg) = tagColors(variant)
-  Text(
-    text = title,
-    style = chipLabelStyle(size).copy(fontWeight = FontWeight.Medium),
-    color = fg,
-    maxLines = 1,
-    overflow = TextOverflow.Ellipsis,
+  Box(
     modifier = modifier
-      .heightIn(min = size.height)
+      .height(size.height)
       .clip(metrics.shapeFull)
       .background(bg)
       .border(1.dp, border, metrics.shapeFull)
-      .padding(
-        horizontal = if (size == ChipSize.Xs) 8.dp else 10.dp,
-        vertical = if (size == ChipSize.Xs) 2.dp else 4.dp,
+      .padding(horizontal = if (size == ChipSize.Xs) 8.dp else 10.dp),
+    contentAlignment = Alignment.Center,
+  ) {
+    Text(
+      text = title,
+      style = chipLabelStyle(size).copy(
+        fontWeight = FontWeight.Medium,
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+        lineHeightStyle = LineHeightStyle(
+          alignment = LineHeightStyle.Alignment.Center,
+          trim = LineHeightStyle.Trim.Both,
+        ),
       ),
-  )
+      color = fg,
+      maxLines = 1,
+      overflow = TextOverflow.Ellipsis,
+    )
+  }
 }
 
 /**
