@@ -68,6 +68,7 @@ data class SampleDestination(
     const val EMPTY = "ui/empty"
     const val SKELETON = "ui/skeleton"
     const val TOAST = "ui/toast"
+    const val LIST = "ui/list"
   }
 }
 
@@ -181,6 +182,12 @@ object SampleCatalog {
       group = SampleGroup.Ui,
       title = "Toast",
       description = "Unified toast / HUD / snackbar queue",
+    ),
+    SampleDestination(
+      route = SampleDestination.LIST,
+      group = SampleGroup.Ui,
+      title = "List",
+      description = "Refresh / load-more / empty-skeleton orchestration",
     ),
     SampleDestination(
       route = "business/comment",

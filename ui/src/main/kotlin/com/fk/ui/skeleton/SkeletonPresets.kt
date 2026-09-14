@@ -160,7 +160,8 @@ object SkeletonPresets {
 /**
  * Lazy list of [SkeletonPresets.ListRow] placeholders.
  *
- * Lightweight stand-in for iOS ListKit `presetRows` until Phase E1 `list`.
+ * Used by Phase E1 `list` for [com.fk.ui.list.ListPresentationState.InitialLoading]
+ * (`presetRows`-style placeholders).
  */
 @Composable
 fun SkeletonListPlaceholder(
