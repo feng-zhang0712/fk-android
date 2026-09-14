@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- From iOS FKBusinessKit fk_heart_fill.svg -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="24dp"
+  android:height="24dp"
+  android:viewportWidth="24"
+  android:viewportHeight="24"
+  android:tint="?attr/colorControlNormal">
+  <path
+    android:pathData="M12,7.69431C10,2.99988 3,3.49988 3,9.49991C3,15.4999 12,20.5001 12,20.5001C12,20.5001 21,15.4999 21,9.49991C21,3.49988 14,2.99988 12,7.69431Z"
+    android:fillColor="#FF000000"
+    android:strokeWidth="2"
+    android:strokeColor="#FF000000"
+    android:strokeLineCap="round"
+    android:strokeLineJoin="round" />
+</vector>
