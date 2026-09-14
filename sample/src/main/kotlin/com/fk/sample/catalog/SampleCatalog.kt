@@ -66,6 +66,7 @@ data class SampleDestination(
     const val APP = "core/app"
     const val THEME = "ui/theme"
     const val EMPTY = "ui/empty"
+    const val SKELETON = "ui/skeleton"
   }
 }
 
@@ -167,6 +168,12 @@ object SampleCatalog {
       group = SampleGroup.Ui,
       title = "Empty",
       description = "Loading / empty / error overlays + resolver",
+    ),
+    SampleDestination(
+      route = SampleDestination.SKELETON,
+      group = SampleGroup.Ui,
+      title = "Skeleton",
+      description = "Shimmer placeholders + list / card presets",
     ),
     SampleDestination(
       route = "business/comment",
