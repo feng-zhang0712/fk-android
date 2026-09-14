@@ -53,6 +53,10 @@ class CommentListController(
   var composerResetToken: Int by mutableStateOf(0)
     private set
 
+  /** Increments when a reply begins so the host can focus the composer (keyboard). */
+  var composerFocusToken: Int by mutableStateOf(0)
+    private set
+
   private var dataSource: CommentListDataSource? = null
   private var listener: CommentListListener = NoOpCommentListListener
   private var disposed = false
@@ -164,8 +168,25 @@ class CommentListController(
   }
 
   fun beginReply(item: CommentItem) {
+    if (!configuration.showsComposer) {
+      listener.onTapReply(item)
+      return
+    }
     replyTarget = CommentReplyTarget(id = item.id, displayName = item.authorName)
+    composerFocusToken += 1
     listener.onTapReply(item)
+  }
+
+  /**
+   * Presents the composer for a top-level comment (no reply target).
+   *
+   * Useful when [CommentComposerPresentationMode.OnDemand] or [CommentComposerPresentationMode.Automatic]
+   * hides the bar until composition begins.
+   */
+  fun beginTopLevelComment() {
+    if (!configuration.showsComposer) return
+    replyTarget = null
+    composerFocusToken += 1
   }
 
   fun cancelReply() {
