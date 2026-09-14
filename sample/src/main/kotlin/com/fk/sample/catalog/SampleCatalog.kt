@@ -70,6 +70,7 @@ data class SampleDestination(
     const val TOAST = "ui/toast"
     const val LIST = "ui/list"
     const val TEXTFIELD = "ui/textfield"
+    const val SHEET = "ui/sheet"
   }
 }
 
@@ -195,6 +196,12 @@ object SampleCatalog {
       group = SampleGroup.Ui,
       title = "TextField",
       description = "Formatting / validation / OTP / counters",
+    ),
+    SampleDestination(
+      route = SampleDestination.SHEET,
+      group = SampleGroup.Ui,
+      title = "Sheet",
+      description = "Multi-detent bottom sheet + center card",
     ),
     SampleDestination(
       route = "business/comment",
