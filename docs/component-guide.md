@@ -161,8 +161,9 @@ Work **top to bottom**. Finish a phase’s **verify** gate before starting the n
 |------:|------|------|
 | G1 | Media3 player orchestration | Shared offline / resume / feed pool required |
 | G2 | WebView JS bridge | Multiple apps share the same bridge contract |
-| G3 | Widgets (Avatar / Chip / StatusPill) | Brand needs exceed Material defaults |
+| G3 | Widgets (Avatar / Chip / StatusPill) | Brand / list chrome needs shared capsules (`com.fk.ui.widget`) |
 | G4 | QR helpers | Many apps need one shared API (otherwise use ML Kit directly) |
+| G5 | FlowVisualization (StepIndicator / Timeline) | Multi-app shared checkout steps or logistics timeline; else screen-local Compose |
 
 ### Suggested milestone map
 
@@ -255,7 +256,8 @@ Material 3 and Compose already cover most commodity controls. Encapsulate **desi
 |------------|------|
 | **Player / Core** (media orchestration) | Only if products need shared offline, resume, QoE, feed player pool on top of Media3. Drop FairPlay / AirPlay / SharePlay / CarPlay. |
 | **WebView** JS bridge | Only if multiple apps share the same bridge contract; otherwise use WebView / Custom Tabs directly. |
-| **Widgets** (Avatar, Chip, StatusPill, …) | Only when brand customization exceeds Material Chip / simple Compose; otherwise keep in host apps or thin theme wrappers. |
+| **Widgets** (Avatar, Chip, StatusPill, …) | When brand / cell chrome needs shared Avatar / Tag / StatusPill (shipped as `com.fk.ui.widget`; Chip stays a thin Material façade). |
+| **FlowVisualization** (`FKStepIndicator` / `FKTimeline`) | Only if **multiple** apps need the same checkout-step / logistics-timeline chrome and state model. Otherwise build screen-local Compose (Column/Row + theme tokens). Do **not** port the full iOS configuration stack by default. |
 
 ### Skip (use Material / platform)
 
@@ -328,11 +330,11 @@ Before merging a new public API into fk-android:
 
 **Do encapsulate**
 
-Pluggable · Network façade · Storage abstraction · Security façade · Model mapping · Logger · Runtime I18n · Permissions · Biometric / Background / LocalNotification façades · File transfers · ImageLoading contract · App infra (non-UI BusinessKit) · Theme · EmptyState · Skeleton · Toast queue · List orchestration · Form TextField enhancements · CommentKit · TabBarFilter · (optional) Player orchestration · (optional, selective) CellKit rows
+Pluggable · Network façade · Storage abstraction · Security façade · Model mapping · Logger · Runtime I18n · Permissions · Biometric / Background / LocalNotification façades · File transfers · ImageLoading contract · App infra (non-UI BusinessKit) · Theme · EmptyState · Skeleton · Toast queue · List orchestration · Form TextField enhancements · CommentKit · TabBarFilter · (optional) Player orchestration · (optional, selective) CellKit rows · (optional) Widgets · (optional) FlowVisualization when multi-app checkout/logistics chrome is required
 
 **Do not encapsulate**
 
-Material commodity controls (Button, Alert, basic Sheet, Badge, Divider, Checkbox, Radio, Progress, Search, Tab, Pager, Carousel) · PhotoPicker · QR · Blur · Keyboard toolkit · bulk Extensions · Base VC system · whole CellKit UI dump · Apple-only features
+Material commodity controls (Button, Alert, basic Sheet, Badge, Divider, Checkbox, Radio, Progress, Search, Tab, Pager, Carousel) · PhotoPicker · QR · Blur · Keyboard toolkit · bulk Extensions · Base VC system · whole CellKit UI dump · Apple-only features · one-off StepIndicator/Timeline UIs that a single screen can Compose locally
 
 ---
 
