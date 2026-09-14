@@ -338,4 +338,4 @@ Material commodity controls (Button, Alert, basic Sheet, Badge, Divider, Checkbo
 
 ---
 
-*Last updated: 2026-09-13 — renamed from component-porting-guide; encapsulation workflow added.*
+*Last updated: 2026-09-14 — Widgets shipped; FlowVisualization marked optional.*
