@@ -14,13 +14,14 @@ Ship only high-reuse row patterns (item model + Compose):
 | `OrderListRow` | `FKOrderListCell` |
 | `InlineToggleRow` | `FKInlineToggleCell` |
 
-Shared chrome: `CellTag`, `CellStatusPill`, search highlight segments.
+Shared chrome: `CellTag` / `CellStatusPill` map to `:ui` `FkTag` / `FkStatusPill`;
+avatars use `FkAvatar` (optional custom `avatar` slot).
 
 ## Skip
 
 - Comment thread cells → use `com.fk.business.comment`
 - Feed video / cart / checkout / grids / form pickers / ListKit registration / skeletons
-- SF Symbols as primary icons; avatar URL loading (host may wire Coil later)
+- SF Symbols as primary icons; CopyChip (order row keeps a simple Copy affordance)
 
 ## Usage
 

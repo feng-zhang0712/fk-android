@@ -21,30 +21,33 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fk.ui.theme.FkColorRole
 import com.fk.ui.theme.FkStatusSemantic
 import com.fk.ui.theme.FkTextStyle
 import com.fk.ui.theme.fkColor
 import com.fk.ui.theme.fkMetrics
-import com.fk.ui.theme.fkStatusColor
 import com.fk.ui.theme.fkTextStyle
+import com.fk.ui.widget.AvatarSize
+import com.fk.ui.widget.FkAvatar
+import com.fk.ui.widget.FkStatusPill
+import com.fk.ui.widget.FkTag
+import com.fk.ui.widget.PresenceState
+import com.fk.ui.widget.TagVariant
 
 /**
  * Person / contact row: avatar, name, subtitle, optional role tag and timestamp.
  *
  * Conceptually aligned with iOS `FKUserListCell` (Compose — not UITableViewCell).
  *
- * @param avatar Optional leading content (e.g. Coil `AsyncImage` for [UserListItem.avatarUrl]).
- *   When null, a letter avatar is shown.
+ * @param avatar Optional leading content that replaces the default [FkAvatar]
+ *   (which already loads [UserListItem.avatarUrl] via Coil when present).
  */
 @Composable
 fun UserListRow(
@@ -69,19 +72,13 @@ fun UserListRow(
           avatar()
         }
       } else {
-        CellLetterAvatar(
-          label = item.displayName,
+        FkAvatar(
+          displayName = item.displayName,
+          imageUrl = item.avatarUrl,
+          size = AvatarSize.M,
+          verified = item.isVerified,
+          presence = item.presence?.toPresenceState(),
           onClick = onTapAvatar,
-        )
-      }
-      item.presence?.let { presence ->
-        Box(
-          modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .offset(x = 1.dp, y = 1.dp)
-            .size(10.dp)
-            .clip(CircleShape)
-            .background(presenceColor(presence)),
         )
       }
       if (item.unreadCount > 0) {
@@ -114,12 +111,11 @@ fun UserListRow(
           overflow = TextOverflow.Ellipsis,
           modifier = Modifier.weight(1f, fill = false),
         )
-        if (item.isVerified) {
-          Box(
-            modifier = Modifier
-              .size(8.dp)
-              .clip(CircleShape)
-              .background(fkStatusColor(FkStatusSemantic.Info)),
+        if (item.isVerified && avatar != null) {
+          Text(
+            text = "✓",
+            style = fkTextStyle(FkTextStyle.Caption2),
+            color = fkColor(FkColorRole.Primary),
           )
         }
       }
@@ -145,7 +141,7 @@ fun UserListRow(
         )
       }
       item.roleTag?.let { tag ->
-        CellTagChip(tag = tag)
+        FkTag(title = tag.title, variant = tag.style.toTagVariant())
       }
     }
   }
@@ -171,9 +167,9 @@ fun NotificationListRow(
     horizontalArrangement = Arrangement.spacedBy(metrics.spacingS),
     verticalAlignment = Alignment.Top,
   ) {
-    CellLetterAvatar(
-      label = item.title,
-      size = 36.dp,
+    FkAvatar(
+      displayName = item.title,
+      size = AvatarSize.S,
       onClick = onClick,
     )
     Column(
@@ -273,7 +269,7 @@ fun SearchResultRow(
       }
     }
     item.categoryTagTitle?.let { titleText ->
-      CellTagChip(tag = CellTag(title = titleText))
+      FkTag(title = titleText, variant = TagVariant.Neutral)
     }
   }
 }
@@ -311,7 +307,7 @@ fun OrderListRow(
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier.weight(1f),
       )
-      CellStatusPillChip(pill = item.statusPill)
+      FkStatusPill(title = item.statusPill.title, style = item.statusPill.style.toStatusSemantic(), showsDot = item.statusPill.showsDot)
     }
     item.subtitle?.let { subtitle ->
       Text(
@@ -408,87 +404,29 @@ fun InlineToggleRow(
   }
 }
 
-@Composable
-private fun CellLetterAvatar(
-  label: String,
-  onClick: () -> Unit,
-  size: Dp = 40.dp,
-) {
-  Box(
-    modifier = Modifier
-      .size(size)
-      .clip(CircleShape)
-      .background(fkColor(FkColorRole.Secondary))
-      .clickable(onClick = onClick),
-    contentAlignment = Alignment.Center,
-  ) {
-    Text(
-      text = label.firstOrNull()?.uppercaseChar()?.toString().orEmpty(),
-      style = fkTextStyle(FkTextStyle.Subheadline),
-      color = fkColor(FkColorRole.OnSecondary),
-    )
-  }
-}
 
-@Composable
-private fun CellTagChip(tag: CellTag) {
-  val color = chromeColor(tag.style)
-  Text(
-    text = tag.title,
-    style = fkTextStyle(FkTextStyle.Caption1),
-    color = color,
-    maxLines = 1,
-    overflow = TextOverflow.Ellipsis,
-    modifier = Modifier
-      .clip(fkMetrics().shapeSmall)
-      .background(color.copy(alpha = 0.12f))
-      .padding(horizontal = 8.dp, vertical = 2.dp),
-  )
-}
-
-@Composable
-private fun CellStatusPillChip(pill: CellStatusPill) {
-  val color = chromeColor(pill.style)
-  Row(
-    modifier = Modifier
-      .clip(fkMetrics().shapeFull)
-      .background(color.copy(alpha = 0.12f))
-      .padding(horizontal = 8.dp, vertical = 4.dp),
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.spacedBy(4.dp),
-  ) {
-    if (pill.showsDot) {
-      Box(
-        modifier = Modifier
-          .size(6.dp)
-          .clip(CircleShape)
-          .background(color),
-      )
-    }
-    Text(
-      text = pill.title,
-      style = fkTextStyle(FkTextStyle.Caption1),
-      color = color,
-      maxLines = 1,
-    )
-  }
-}
-
-@Composable
-private fun chromeColor(style: CellChromeStyle): Color =
-  when (style) {
-    CellChromeStyle.Neutral -> fkStatusColor(FkStatusSemantic.Neutral)
-    CellChromeStyle.Success -> fkStatusColor(FkStatusSemantic.Success)
-    CellChromeStyle.Warning -> fkStatusColor(FkStatusSemantic.Warning)
-    CellChromeStyle.Error -> fkStatusColor(FkStatusSemantic.Error)
-    CellChromeStyle.Info -> fkStatusColor(FkStatusSemantic.Info)
+private fun CellChromeStyle.toTagVariant(): TagVariant =
+  when (this) {
+    CellChromeStyle.Neutral -> TagVariant.Neutral
+    CellChromeStyle.Success -> TagVariant.Success
+    CellChromeStyle.Warning -> TagVariant.Warning
+    CellChromeStyle.Error -> TagVariant.Error
+    CellChromeStyle.Info -> TagVariant.Brand
   }
 
-@Composable
-private fun presenceColor(presence: CellPresence): Color =
-  when (presence) {
-    CellPresence.Online -> fkStatusColor(FkStatusSemantic.Success)
-    CellPresence.Away -> fkStatusColor(FkStatusSemantic.Warning)
-    CellPresence.Busy -> fkStatusColor(FkStatusSemantic.Error)
-    CellPresence.Offline -> fkStatusColor(FkStatusSemantic.Neutral)
+private fun CellChromeStyle.toStatusSemantic(): FkStatusSemantic =
+  when (this) {
+    CellChromeStyle.Neutral -> FkStatusSemantic.Neutral
+    CellChromeStyle.Success -> FkStatusSemantic.Success
+    CellChromeStyle.Warning -> FkStatusSemantic.Warning
+    CellChromeStyle.Error -> FkStatusSemantic.Error
+    CellChromeStyle.Info -> FkStatusSemantic.Info
+  }
+
+private fun CellPresence.toPresenceState(): PresenceState =
+  when (this) {
+    CellPresence.Online -> PresenceState.Online
+    CellPresence.Away -> PresenceState.Away
+    CellPresence.Busy -> PresenceState.Busy
+    CellPresence.Offline -> PresenceState.Offline
   }

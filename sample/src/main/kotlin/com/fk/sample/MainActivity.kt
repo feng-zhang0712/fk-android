@@ -34,6 +34,7 @@ import com.fk.sample.home.SampleHomeScreen
 import com.fk.sample.ui.empty.EmptyDemoScreen
 import com.fk.sample.ui.list.ListDemoScreen
 import com.fk.sample.ui.sheet.SheetDemoScreen
+import com.fk.sample.ui.widget.WidgetDemoScreen
 import com.fk.sample.ui.skeleton.SkeletonDemoScreen
 import com.fk.sample.ui.textfield.TextFieldDemoScreen
 import com.fk.sample.ui.theme.ThemeDemoScreen
@@ -148,6 +149,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.SHEET) {
       SheetDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.WIDGET) {
+      WidgetDemoScreen(onBack = { navController.popBackStack() })
     }
     composable(SampleDestination.COMMENT) {
       CommentDemoScreen(onBack = { navController.popBackStack() })

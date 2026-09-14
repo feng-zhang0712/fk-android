@@ -71,6 +71,7 @@ data class SampleDestination(
     const val LIST = "ui/list"
     const val TEXTFIELD = "ui/textfield"
     const val SHEET = "ui/sheet"
+    const val WIDGET = "ui/widget"
     const val COMMENT = "business/comment"
     const val FILTER = "business/filter"
     const val CELL = "business/cell"
@@ -205,6 +206,12 @@ object SampleCatalog {
       group = SampleGroup.Ui,
       title = "Sheet",
       description = "Multi-detent bottom sheet + center card",
+    ),
+    SampleDestination(
+      route = SampleDestination.WIDGET,
+      group = SampleGroup.Ui,
+      title = "Widget",
+      description = "Avatar / Chip / Tag / StatusPill design widgets",
     ),
     SampleDestination(
       route = SampleDestination.COMMENT,
