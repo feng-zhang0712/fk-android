@@ -73,6 +73,7 @@ data class SampleDestination(
     const val SHEET = "ui/sheet"
     const val COMMENT = "business/comment"
     const val FILTER = "business/filter"
+    const val CELL = "business/cell"
   }
 }
 
@@ -216,6 +217,12 @@ object SampleCatalog {
       group = SampleGroup.Business,
       title = "Filter",
       description = "Tab strip + hierarchy / dual / tags / list panels",
+    ),
+    SampleDestination(
+      route = SampleDestination.CELL,
+      group = SampleGroup.Business,
+      title = "Cell",
+      description = "Selective business rows (user / notice / search / order / toggle)",
     ),
   )
 

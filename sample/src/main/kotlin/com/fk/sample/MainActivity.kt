@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import com.fk.sample.catalog.SampleDestination
 import com.fk.sample.catalog.SampleGroup
 import com.fk.sample.business.comment.CommentDemoScreen
+import com.fk.sample.business.cell.CellDemoScreen
 import com.fk.sample.business.filter.FilterDemoScreen
 import com.fk.sample.core.app.AppDemoScreen
 import com.fk.sample.core.background.BackgroundDemoScreen
@@ -153,6 +154,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.FILTER) {
       FilterDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.CELL) {
+      CellDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }
