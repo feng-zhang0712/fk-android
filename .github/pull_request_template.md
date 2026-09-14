@@ -17,7 +17,7 @@
 
 - [ ] Local verify: `./gradlew :core:assembleRelease :ui:assembleRelease :business:assembleRelease`
 - [ ] `:sample` updated when **public API** changed (if applicable)
-- [ ] Component guide consulted / updated when adding a new component area (`docs/component-guide.md`)
+- [ ] Docs updated when installation / release / public API surface changes (`docs/`, `CHANGELOG.md`)
 
 ## New public API
 

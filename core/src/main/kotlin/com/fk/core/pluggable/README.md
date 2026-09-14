@@ -1,7 +1,6 @@
 # Pluggable (`com.fk.core.pluggable`)
 
-DI / replaceable contracts for app infrastructure. Phase **A1** in the root
-[component guide](../../../../../../../../docs/component-guide.md).
+DI / replaceable contracts for app infrastructure.
 
 ## Layout
 

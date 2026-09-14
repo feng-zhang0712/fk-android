@@ -2,6 +2,7 @@ plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.kotlin.serialization)
+  `maven-publish`
 }
 
 android {
@@ -25,6 +26,45 @@ android {
   publishing {
     singleVariant("release") {
       withSourcesJar()
+    }
+  }
+}
+
+afterEvaluate {
+  publishing {
+    publications {
+      register<MavenPublication>("release") {
+        from(components["release"])
+        groupId = providers.gradleProperty("FK_GROUP_ID").get()
+        artifactId = "core"
+        version = providers.gradleProperty("FK_VERSION_NAME").get()
+        pom {
+          name.set("fk-android core")
+          description.set("Foundation library for fk-android (network, storage, pluggable, …)")
+          url.set("https://github.com/feng-zhang0712/fk-android")
+          licenses {
+            license {
+              name.set("MIT License")
+              url.set("https://opensource.org/licenses/MIT")
+            }
+          }
+          scm {
+            connection.set("scm:git:git://github.com/feng-zhang0712/fk-android.git")
+            developerConnection.set("scm:git:ssh://github.com/feng-zhang0712/fk-android.git")
+            url.set("https://github.com/feng-zhang0712/fk-android")
+          }
+        }
+      }
+    }
+    repositories {
+      maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/feng-zhang0712/fk-android")
+        credentials {
+          username = (findProperty("gpr.user") as String?) ?: System.getenv("GITHUB_ACTOR")
+          password = (findProperty("gpr.key") as String?) ?: System.getenv("GITHUB_TOKEN")
+        }
+      }
     }
   }
 }

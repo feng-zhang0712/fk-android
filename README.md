@@ -3,19 +3,21 @@
 [![Android](https://img.shields.io/badge/Android-minSdk%2024-green.svg)](https://developer.android.com/)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1-purple.svg)](https://kotlinlang.org/)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-blue.svg)](https://developer.android.com/jetpack/compose)
+[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](LICENSE)
 
-Android component libraries corresponding to iOS [FKKit](../FKKit) / [FKBusinessKit](../FKBusinessKit).
+Android component libraries for shared app infrastructure and Compose UI.
 
-| Module | Maven artifact | Maps to (iOS) | Role |
-|--------|----------------|---------------|------|
-| `:core` | `com.fk.android:core` | FKCoreKit | Foundation: pluggable contracts, network, storage, security, logging, … |
-| `:ui` | `com.fk.android:ui` | FKUIKit | Design tokens + high-value Compose UI (not every Material control) |
-| `:business` | `com.fk.android:business` | FKBusinessKit | Business composites (comment, filter, selective list rows) |
-| `:sample` | — (app) | FKKitExamples | Local demo / compile smoke check |
+| Module | Maven artifact | Role |
+|--------|----------------|------|
+| `:core` | `com.fk.android:core` | Foundation: pluggable contracts, network, storage, security, logging, … |
+| `:ui` | `com.fk.android:ui` | Design tokens + high-value Compose UI (not every Material control) |
+| `:business` | `com.fk.android:business` | Business composites (comment, filter, selective list rows) |
+| `:sample` | — (app) | Local demo / compile smoke check |
 
 **Naming:** short module names; brand lives in Maven `groupId` (`com.fk.android`), not in every artifact prefix.
 
+Current library version: **`0.1.0`** (`FK_VERSION_NAME` in [`gradle.properties`](gradle.properties)). See [CHANGELOG.md](CHANGELOG.md).
 
 ## Code style
 
@@ -29,7 +31,7 @@ Android component libraries corresponding to iOS [FKKit](../FKKit) / [FKBusiness
 - Android SDK (compile / target **36**, **minSdk 24**)
 - Android Studio Ladybug+ (or compatible AGP 8.8)
 
-`minSdk 24` (Android 7.0) is intentional for a shared library: broader device reach than matching iOS 15’s calendar year (≈ API 31), while still covering virtually all active Android devices. Raise only if a future component requires newer platform APIs.
+`minSdk 24` (Android 7.0) keeps the shared library usable on virtually all active Android devices. Raise only if a future component requires newer platform APIs.
 
 ## Project layout
 
@@ -39,12 +41,13 @@ fk-android/
 ├── ui/                   # Compose UI library (depends on :core)
 ├── business/             # business UI library (depends on :ui)
 ├── sample/               # demo application
-├── docs/                 # component guide and design notes
+├── docs/                 # installation & release docs
+├── scripts/              # publish helpers
 ├── gradle/libs.versions.toml
 └── settings.gradle.kts
 ```
 
-### `:core` packages (planned)
+### `:core` packages
 
 | Package | Intent |
 |---------|--------|
@@ -65,23 +68,25 @@ fk-android/
 | `background` | WorkManager façade |
 | `app` | Version / deeplink / lifecycle / analytics hooks |
 
-### `:ui` packages (planned)
+### `:ui` packages
 
 | Package | Intent |
 |---------|--------|
 | `theme` | Design tokens + `FkTheme` |
 | `empty` | Empty / error / loading overlays |
 | `skeleton` | Skeleton placeholders |
-| `toast` | Toast / HUD / snackbar queue |
+| `toast` | Toast / HUD / snackbar |
 | `list` | List orchestration (refresh, paging chrome) |
 | `textfield` | Formatted / validated inputs |
 | `sheet` | Product-level sheets when Material is not enough |
+| `widget` | Avatar, chip façade, tag, status pill |
+| `flow` | Step indicator + timeline |
 
-### `:business` packages (planned)
+### `:business` packages
 
 | Package | Intent |
 |---------|--------|
-| `comment` | Comment list + composer contracts |
+| `comment` | Comment list + composer |
 | `filter` | Tab / multi-panel filter UX |
 | `cell` | Selective business row patterns (models + Compose) |
 
@@ -92,27 +97,42 @@ fk-android/
 ./gradlew :sample:assembleDebug
 ```
 
-## Consume (local)
+## Installation (consume in an Android app)
+
+Use a **Gradle** dependency on a **Maven** coordinate (`groupId:artifactId:version`).
+
+**Full guide:** **[docs/installation.md](docs/installation.md)** — Maven / GitHub Packages, `mavenLocal()`, composite builds, and ProGuard notes.
+
+**Release checklist:** **[docs/releasing.md](docs/releasing.md)**
+
+### Quick start (recommended for host apps)
+
+```kotlin
+// After artifacts are published (or after publishToMavenLocal):
+dependencies {
+  implementation("com.fk.android:business:0.1.0") // api() pulls :ui and :core
+}
+```
+
+Publish from this repo to `~/.m2`:
+
+```bash
+./scripts/publish-local.sh
+```
+
+### Same Gradle build (monorepo)
 
 ```kotlin
 dependencies {
   implementation(project(":business")) // pulls :ui and :core
-  // or:
-  implementation(project(":core"))
-  implementation(project(":ui"))
 }
 ```
-
-## Component guide
-
-Before adding components, read **[docs/component-guide.md](docs/component-guide.md)** — what to encapsulate from FKKit / FKBusinessKit vs what to leave to Android / Material.
 
 ## Design notes
 
 - Prefer **Jetpack + Material 3** for commodity controls; only wrap what multi-app projects need for consistency.
-- Do **not** port iOS `Base` view-controller shells; use Compose Navigation / app scaffolds in host apps.
-- English only for public APIs, comments, and docs (aligned with FKKit).
-
+- Use Compose Navigation / app scaffolds in host apps rather than library “base” activity shells.
+- English only for public APIs, comments, and docs.
 
 ## Contributing
 
@@ -153,7 +173,7 @@ Please report security vulnerabilities through [GitHub private security advisori
   - change summary
   - test/verification notes
   - migration notes when APIs change
-- Tag stable releases with semantic versions (for example: `0.1.0`), then merge release work back into `develop`.
+- Tag stable releases with semantic versions **without** a `v` prefix (for example: `0.1.0`), on `main` after merging from `develop`.
 
 ## License
 
