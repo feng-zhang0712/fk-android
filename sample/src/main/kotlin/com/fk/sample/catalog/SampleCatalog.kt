@@ -69,6 +69,7 @@ data class SampleDestination(
     const val SKELETON = "ui/skeleton"
     const val TOAST = "ui/toast"
     const val LIST = "ui/list"
+    const val TEXTFIELD = "ui/textfield"
   }
 }
 
@@ -188,6 +189,12 @@ object SampleCatalog {
       group = SampleGroup.Ui,
       title = "List",
       description = "Refresh / load-more / empty-skeleton orchestration",
+    ),
+    SampleDestination(
+      route = SampleDestination.TEXTFIELD,
+      group = SampleGroup.Ui,
+      title = "TextField",
+      description = "Formatting / validation / OTP / counters",
     ),
     SampleDestination(
       route = "business/comment",

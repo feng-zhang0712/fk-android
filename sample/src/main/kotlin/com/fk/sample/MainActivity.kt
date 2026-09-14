@@ -31,6 +31,7 @@ import com.fk.sample.home.SampleHomeScreen
 import com.fk.sample.ui.empty.EmptyDemoScreen
 import com.fk.sample.ui.list.ListDemoScreen
 import com.fk.sample.ui.skeleton.SkeletonDemoScreen
+import com.fk.sample.ui.textfield.TextFieldDemoScreen
 import com.fk.sample.ui.theme.ThemeDemoScreen
 import com.fk.sample.ui.toast.ToastDemoScreen
 import com.fk.ui.theme.FkTheme
@@ -137,6 +138,9 @@ private fun SampleNavHost() {
     }
     composable(SampleDestination.LIST) {
       ListDemoScreen(onBack = { navController.popBackStack() })
+    }
+    composable(SampleDestination.TEXTFIELD) {
+      TextFieldDemoScreen(onBack = { navController.popBackStack() })
     }
   }
 }
