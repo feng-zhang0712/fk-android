@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Aligned with iOS Assets `arrow_triangle_down`. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="14dp"
+    android:height="14dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M13.083,15.660 Q12.000,17.400 10.917,15.660 L6.983,9.340 Q5.900,7.600 7.950,7.600 L16.050,7.600 Q18.100,7.600 17.017,9.340 Z" />
+</vector>

@@ -50,6 +50,7 @@ internal fun FilterPanelBody(
   onSelection: (FilterPanelSelection) -> Unit,
   modifier: Modifier = Modifier,
 ) {
+  val appearance = LocalFilterAppearance.current
   when (content) {
     is FilterPanelContent.Hierarchy ->
       TwoColumnListPanel(
@@ -61,6 +62,7 @@ internal fun FilterPanelBody(
         onSelection = onSelection,
         modifier = modifier,
         gridStyle = false,
+        pillStyle = appearance.directoryPillStyle,
       )
     is FilterPanelContent.DualHierarchy ->
       TwoColumnListPanel(
@@ -72,16 +74,18 @@ internal fun FilterPanelBody(
         onSelection = onSelection,
         modifier = modifier,
         gridStyle = true,
+        pillStyle = appearance.directoryPillStyle,
       )
     is FilterPanelContent.Tags ->
       TagsPanel(
         sections = content.sections,
-        columns = content.columns,
+        columns = content.columns.takeIf { it > 0 } ?: appearance.tagsPillStyle.columns,
         allowsMultipleSelection = allowsMultipleSelection,
         emptyLabel = emptyLabel,
         onSectionsChange = { onContentChange(content.copy(sections = it)) },
         onSelection = onSelection,
         modifier = modifier,
+        pillStyle = appearance.tagsPillStyle,
       )
     is FilterPanelContent.SingleList ->
       SingleListPanel(
@@ -91,6 +95,7 @@ internal fun FilterPanelBody(
         onSectionChange = { onContentChange(content.copy(section = it)) },
         onSelection = onSelection,
         modifier = modifier,
+        textCentered = appearance.listTextCentered,
       )
     is FilterPanelContent.Custom -> {
       // Host renders [FilterHost] customPanel; this branch is a safe fallback only.
@@ -115,6 +120,7 @@ private fun TwoColumnListPanel(
   onSelection: (FilterPanelSelection) -> Unit,
   modifier: Modifier = Modifier,
   gridStyle: Boolean,
+  pillStyle: FilterPillStyle,
 ) {
   val metrics = fkMetrics()
   val categoryId = model.selectedCategoryId
@@ -192,6 +198,7 @@ private fun TwoColumnListPanel(
             section = section,
             config = config,
             headerSelected = model.selectedHeaderSectionId == section.id,
+            pillStyle = pillStyle,
             onHeaderTap = {
               handleHeaderTap(model, categoryId!!, section, config, onModelChange, onSelection)
             },
@@ -258,6 +265,7 @@ private fun TwoColumnChipSection(
   section: FilterSection,
   config: TwoColumnPanelConfig,
   headerSelected: Boolean,
+  pillStyle: FilterPillStyle,
   onHeaderTap: () -> Unit,
   onItemTap: (FilterOptionItem) -> Unit,
 ) {
@@ -271,7 +279,8 @@ private fun TwoColumnChipSection(
     if (!section.isCollapsed) {
       FilterChipFlow(
         items = section.items,
-        columns = 3,
+        columns = pillStyle.columns.coerceAtLeast(1),
+        pillStyle = pillStyle,
         onItemTap = onItemTap,
       )
     }
@@ -366,6 +375,7 @@ private fun TagsPanel(
   onSectionsChange: (List<FilterSection>) -> Unit,
   onSelection: (FilterPanelSelection) -> Unit,
   modifier: Modifier = Modifier,
+  pillStyle: FilterPillStyle,
 ) {
   val metrics = fkMetrics()
   if (sections.isEmpty() || sections.all { it.items.isEmpty() }) {
@@ -402,6 +412,7 @@ private fun TagsPanel(
       FilterChipFlow(
         items = section.items,
         columns = columns,
+        pillStyle = pillStyle,
         onItemTap = { item ->
           val result = FilterSelection.toggleInSection(
             section = section,
@@ -427,6 +438,7 @@ private fun SingleListPanel(
   onSectionChange: (FilterSection) -> Unit,
   onSelection: (FilterPanelSelection) -> Unit,
   modifier: Modifier = Modifier,
+  textCentered: Boolean = true,
 ) {
   if (section.items.isEmpty()) {
     Box(
@@ -448,6 +460,7 @@ private fun SingleListPanel(
       FilterListRow(
         item = item,
         selected = item.isSelected,
+        textCentered = textCentered,
         onClick = {
           val result = FilterSelection.toggleInSection(
             section = section,
@@ -470,23 +483,26 @@ private fun FilterListRow(
   item: FilterOptionItem,
   selected: Boolean,
   onClick: () -> Unit,
+  textCentered: Boolean = false,
 ) {
   val enabled = item.isEnabled
+  val textColor = when {
+    !enabled -> fkColor(FkColorRole.OnSurfaceSecondary)
+    selected -> fkColor(FkColorRole.Primary)
+    else -> fkColor(FkColorRole.OnSurface)
+  }
   Column(
     modifier = Modifier
       .fillMaxWidth()
       .clickable(enabled = enabled, onClick = onClick)
       .padding(horizontal = 16.dp, vertical = 14.dp),
+    horizontalAlignment = if (textCentered) Alignment.CenterHorizontally else Alignment.Start,
   ) {
     Text(
       text = item.title,
       style = fkTextStyle(FkTextStyle.Body),
-      fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
-      color = when {
-        !enabled -> fkColor(FkColorRole.OnSurfaceSecondary)
-        selected -> fkColor(FkColorRole.Primary)
-        else -> fkColor(FkColorRole.OnSurface)
-      },
+      fontWeight = FontWeight.Normal,
+      color = textColor,
     )
     item.subtitle?.let { subtitle ->
       Text(
@@ -504,6 +520,7 @@ private fun FilterListRow(
 private fun FilterChipFlow(
   items: List<FilterOptionItem>,
   columns: Int,
+  pillStyle: FilterPillStyle,
   onItemTap: (FilterOptionItem) -> Unit,
 ) {
   val columnCount = columns.coerceAtLeast(1)
@@ -519,6 +536,7 @@ private fun FilterChipFlow(
         FilterChip(
           item = item,
           width = chipWidth,
+          style = pillStyle,
           onClick = { onItemTap(item) },
         )
       }
@@ -530,37 +548,61 @@ private fun FilterChipFlow(
 private fun FilterChip(
   item: FilterOptionItem,
   width: Dp,
+  style: FilterPillStyle,
   onClick: () -> Unit,
 ) {
-  val shape = RoundedCornerShape(6.dp)
+  val shape = RoundedCornerShape(style.cornerRadiusDp.dp)
   val enabled = item.isEnabled
+  val primary = fkColor(FkColorRole.Primary)
+  val onPrimary = fkColor(FkColorRole.OnPrimary)
+  val onSurface = fkColor(FkColorRole.OnSurface)
+  val mutedBorder = Color(0xFFBBBBBB)
+
   val bg = when {
     !enabled -> fkColor(FkColorRole.SurfaceElevated)
-    item.isSelected -> fkColor(FkColorRole.Primary).copy(alpha = 0.12f)
-    else -> fkColor(FkColorRole.Surface)
+    item.isSelected && style.selectedFillPrimary -> primary
+    item.isSelected && style.selectedTextOnly -> Color.Transparent
+    else -> if (style.showNormalBorder) Color.White else Color(0xFFF5F5F5)
   }
   val border = when {
     !enabled -> fkColor(FkColorRole.Outline)
-    item.isSelected -> fkColor(FkColorRole.Primary)
-    else -> fkColor(FkColorRole.Outline)
+    item.isSelected && style.selectedFillPrimary -> Color.Transparent
+    item.isSelected && style.selectedTextOnly -> Color.Transparent
+    style.showNormalBorder -> mutedBorder
+    else -> Color.Transparent
   }
   val textColor = when {
     !enabled -> fkColor(FkColorRole.OnSurfaceSecondary)
-    item.isSelected -> fkColor(FkColorRole.Primary)
-    else -> fkColor(FkColorRole.OnSurface)
+    item.isSelected && style.selectedFillPrimary -> onPrimary
+    item.isSelected -> primary
+    else -> onSurface
   }
-  Text(
-    text = item.title,
-    style = fkTextStyle(FkTextStyle.Subheadline),
-    color = textColor,
-    maxLines = 1,
-    overflow = TextOverflow.Ellipsis,
+  val borderWidth = if (border == Color.Transparent) 0.dp else 1.dp
+  Box(
     modifier = Modifier
       .width(width)
       .clip(shape)
-      .border(1.dp, border, shape)
+      .then(
+        if (borderWidth > 0.dp) {
+          Modifier.border(borderWidth, border, shape)
+        } else {
+          Modifier
+        },
+      )
       .background(bg)
       .clickable(enabled = enabled, onClick = onClick)
-      .padding(horizontal = 12.dp, vertical = 10.dp),
-  )
+      .padding(
+        horizontal = style.horizontalPaddingDp.dp,
+        vertical = style.verticalPaddingDp.dp,
+      ),
+    contentAlignment = Alignment.Center,
+  ) {
+    Text(
+      text = item.title,
+      style = fkTextStyle(FkTextStyle.Subheadline),
+      color = textColor,
+      maxLines = 1,
+      overflow = TextOverflow.Ellipsis,
+    )
+  }
 }
