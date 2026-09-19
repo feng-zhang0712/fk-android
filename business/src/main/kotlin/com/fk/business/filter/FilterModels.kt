@@ -190,9 +190,103 @@ sealed class FilterPanelContent {
   ) : FilterPanelContent()
 }
 
+/** How filter strip tabs share horizontal space. */
+enum class FilterTabWidthMode {
+  /** Equal width, no horizontal scroll (iOS `fillEqually`). */
+  FillEqually,
+  /** Intrinsic widths with horizontal scroll. */
+  IntrinsicScrollable,
+}
+
+/**
+ * Chip / pill visual recipe (tags vs directory grids).
+ *
+ * Defaults align with SACTrain / iOS `FKFilterAppearance` pill styles.
+ */
+data class FilterPillStyle(
+  val cornerRadiusDp: Float = 6f,
+  val horizontalPaddingDp: Float = 8f,
+  val verticalPaddingDp: Float = 10f,
+  /** Unselected: 1dp muted border (tags / platform chips). */
+  val showNormalBorder: Boolean = true,
+  /** Selected: solid primary fill + onPrimary text (tags). */
+  val selectedFillPrimary: Boolean = true,
+  /** Selected: primary text only, clear fill/border (directory). */
+  val selectedTextOnly: Boolean = false,
+  /** Directory / tags grid column count. */
+  val columns: Int = 3,
+)
+
+/**
+ * Panel height policy relative to the host content area height.
+ *
+ * - [minDp] / [minScreenFraction]: lower bound (whichever is larger wins)
+ * - [maxScreenFraction]: upper bound
+ * - When [fillToMinimum] is true (directory), height is pinned to at least the
+ *   lower bound even if content is shorter (iOS `screenMinimumFraction`).
+ */
+data class FilterPanelHeightPolicy(
+  val minDp: Float = 80f,
+  val minScreenFraction: Float = 0f,
+  val maxScreenFraction: Float = 0.55f,
+  val fillToMinimum: Boolean = false,
+) {
+  companion object {
+    /** Tags / sort / platform: wrap content up to ~55% screen. */
+    val Adaptive: FilterPanelHeightPolicy = FilterPanelHeightPolicy(
+      minDp = 80f,
+      minScreenFraction = 0f,
+      maxScreenFraction = 0.55f,
+      fillToMinimum = false,
+    )
+
+    /** Course / knowledge directory: ~45–55% host height (scroll inside; not full screen). */
+    val Directory: FilterPanelHeightPolicy = FilterPanelHeightPolicy(
+      minDp = 200f,
+      minScreenFraction = 0.45f,
+      maxScreenFraction = 0.55f,
+      fillToMinimum = true,
+    )
+  }
+}
+
+/**
+ * Visual / layout appearance for [FilterHost].
+ *
+ * Defaults match iOS equal-width strip + SACTrain pill / height recipes.
+ */
+data class FilterAppearance(
+  val tabWidthMode: FilterTabWidthMode = FilterTabWidthMode.FillEqually,
+  val stripHeightDp: Float = 50f,
+  val showsStripDivider: Boolean = true,
+  val stripHorizontalPaddingDp: Float = 4f,
+  val tagsPillStyle: FilterPillStyle = FilterPillStyle(
+    showNormalBorder = true,
+    selectedFillPrimary = true,
+    selectedTextOnly = false,
+    columns = 3,
+  ),
+  val directoryPillStyle: FilterPillStyle = FilterPillStyle(
+    showNormalBorder = false,
+    selectedFillPrimary = false,
+    selectedTextOnly = true,
+    columns = 2,
+    verticalPaddingDp = 10f,
+  ),
+  val listTextCentered: Boolean = true,
+  val tagsHeight: FilterPanelHeightPolicy = FilterPanelHeightPolicy.Adaptive,
+  val directoryHeight: FilterPanelHeightPolicy = FilterPanelHeightPolicy.Directory,
+  val listHeight: FilterPanelHeightPolicy = FilterPanelHeightPolicy.Adaptive,
+)
+
 /** Feature flags and copy for the filter host. */
 data class FilterConfiguration(
-  val panelMaxHeightFraction: Float = 0.45f,
+  /**
+   * Fallback max height fraction when [appearance] height policies are unused.
+   * Prefer [FilterAppearance] height policies.
+   */
+  val panelMaxHeightFraction: Float = 0.55f,
+  val appearance: FilterAppearance = FilterAppearance(),
   val strings: FilterStrings = FilterStrings(),
 )
 
