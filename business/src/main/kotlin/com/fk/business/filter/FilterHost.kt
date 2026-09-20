@@ -36,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
@@ -69,7 +68,7 @@ internal val LocalFilterAppearance = staticCompositionLocalOf { FilterAppearance
  * @param onPanelContentChange Called when a built-in panel mutates its model.
  * @param onSelection Fired after model update (and after controller auto-collapse for single-select).
  * @param customPanel Optional composable for [FilterPanelContent.Custom] tabs.
- * @param collapsedChevron Optional painter for collapsed tab chevron (defaults to triangle asset).
+ * @param collapsedChevron Optional painter for collapsed tab chevron (defaults to SACTrain stroke chevron).
  * @param expandedChevron Optional painter for expanded tab chevron.
  */
 @Composable
@@ -95,8 +94,8 @@ fun FilterHost(
     presentedTab = expandedTab
   }
 
-  val defaultCollapsed = painterResource(R.drawable.fk_ic_arrow_triangle_down)
-  val defaultExpanded = painterResource(R.drawable.fk_ic_arrow_triangle_up)
+  val defaultCollapsed = painterResource(R.drawable.fk_ic_chevron_down)
+  val defaultExpanded = painterResource(R.drawable.fk_ic_chevron_up)
   val chevronCollapsed = collapsedChevron ?: defaultCollapsed
   val chevronExpanded = expandedChevron ?: defaultExpanded
 
@@ -253,7 +252,7 @@ private fun FilterTabStrip(
   Row(
     modifier = modifier
       .height(stripHeight)
-      .background(Color(0xFFF7F7F7))
+      .background(fkColor(FkColorRole.Surface))
       .then(
         if (fillEqually) {
           Modifier.fillMaxWidth()
@@ -284,7 +283,7 @@ private fun FilterTabStrip(
         Text(
           text = title,
           style = fkTextStyle(FkTextStyle.Subheadline),
-          fontWeight = FontWeight.Medium,
+          fontWeight = FontWeight.Normal,
           color = tint,
           maxLines = 1,
           overflow = TextOverflow.Ellipsis,

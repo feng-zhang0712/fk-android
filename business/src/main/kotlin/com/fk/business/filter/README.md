@@ -46,7 +46,7 @@ See `:sample` → Business → Filter.
 ## Appearance (Phase F2+)
 
 - Tab strip: `FilterTabWidthMode.FillEqually` (default) or `IntrinsicScrollable`
-- Chevron: `fk_ic_arrow_triangle_down` / `_up` (override via `FilterHost` painters)
+- Chevron: `fk_ic_chevron_down` / `_up` from SACTrain Common (override via `FilterHost` painters)
 - Tags pills: selected = primary fill + onPrimary text; unselected = `#BBBBBB` border
 - Directory pills: selected = primary text only; 2 columns
 - Heights: tags/list adaptive ≤55% host; directory fixed ~45–55% host (scroll inside)

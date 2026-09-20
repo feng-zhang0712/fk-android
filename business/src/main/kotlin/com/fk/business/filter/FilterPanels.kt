@@ -142,7 +142,7 @@ private fun TwoColumnListPanel(
         Text(
           text = category.title,
           style = fkTextStyle(FkTextStyle.Subheadline),
-          fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+          fontWeight = FontWeight.Normal,
           color = if (selected) {
             fkColor(FkColorRole.Primary)
           } else {
@@ -305,7 +305,7 @@ private fun TwoColumnSectionHeader(
       else -> title
     },
     style = fkTextStyle(FkTextStyle.Subheadline),
-    fontWeight = FontWeight.SemiBold,
+    fontWeight = FontWeight.Normal,
     color = if (selected) fkColor(FkColorRole.Primary) else fkColor(FkColorRole.OnSurface),
     modifier = Modifier
       .fillMaxWidth()
@@ -405,7 +405,7 @@ private fun TagsPanel(
         Text(
           text = title,
           style = fkTextStyle(FkTextStyle.Subheadline),
-          fontWeight = FontWeight.SemiBold,
+          fontWeight = FontWeight.Normal,
           color = fkColor(FkColorRole.OnSurface),
         )
       }
