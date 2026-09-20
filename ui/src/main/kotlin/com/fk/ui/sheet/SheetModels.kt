@@ -8,7 +8,7 @@ package com.fk.ui.sheet
  */
 object FkSheet {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.0"
+  const val VERSION: String = "0.1.2"
 }
 
 /**

@@ -13,7 +13,7 @@ import java.util.Locale
  */
 object I18n {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.0"
+  const val VERSION: String = "0.1.2"
 
   /** Default SharedPreferences key for persisted language selection. */
   const val DEFAULT_STORAGE_KEY: String = "com.fk.i18n.language"

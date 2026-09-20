@@ -12,7 +12,7 @@ import com.fk.core.pluggable.mock.MockAppLifecycleObserver
  */
 object App {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.0"
+  const val VERSION: String = "0.1.2"
 
   /** Builds production defaults bound to [context]. */
   fun create(

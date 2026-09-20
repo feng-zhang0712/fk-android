@@ -9,7 +9,7 @@ import android.content.Context
  */
 object Background {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.0"
+  const val VERSION: String = "0.1.2"
 
   /** Builds the default [BackgroundTaskManager] implementation. */
   fun create(

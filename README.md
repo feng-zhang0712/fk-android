@@ -3,7 +3,7 @@
 [![Android](https://img.shields.io/badge/Android-minSdk%2024-green.svg)](https://developer.android.com/)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1-purple.svg)](https://kotlinlang.org/)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-blue.svg)](https://developer.android.com/jetpack/compose)
-[![Version](https://img.shields.io/badge/version-0.1.1-orange.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.1.2-orange.svg)](CHANGELOG.md)
 [![JitPack](https://jitpack.io/v/feng-zhang0712/fk-android.svg)](https://jitpack.io/#feng-zhang0712/fk-android)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](LICENSE)
 
@@ -12,13 +12,13 @@ Android component libraries for shared app infrastructure and Compose UI.
 | Module | Remote install (JitPack) | Role |
 |--------|--------------------------|------|
 | `:core` | `com.github.feng-zhang0712.fk-android:core` | Foundation: pluggable contracts, network, storage, security, logging, … |
-| `:ui` | `com.github.feng-zhang0712.fk-android:ui` | Design tokens + high-value Compose UI (not every Material control) |
+| `:ui` | `com.github.feng-zhang0712.fk-android:ui` | Design tokens + high-value Compose UI (not every Material control), including Rating |
 | `:business` | `com.github.feng-zhang0712.fk-android:business` | Business composites (comment, filter, selective list rows) |
 | `:sample` | — (app) | Local demo / compile smoke check |
 
 **Naming:** short module names. Open-source apps install from a **Git tag via JitPack** (same idea as SPM from Git). Maven Central coordinates `com.fk.android:*` are planned — see [docs/releasing.md](docs/releasing.md).
 
-Current library version / Git tag: **`0.1.1`**. See [CHANGELOG.md](CHANGELOG.md).
+Current library version / Git tag: **`0.1.2`**. See [CHANGELOG.md](CHANGELOG.md).
 
 ## Code style
 
@@ -110,7 +110,7 @@ Install from a **GitHub release tag** via [JitPack](https://jitpack.io) (closest
 maven { url = uri("https://jitpack.io") }
 
 // app/build.gradle.kts — dependency (version = Git tag)
-implementation("com.github.feng-zhang0712.fk-android:business:0.1.1")
+implementation("com.github.feng-zhang0712.fk-android:business:0.1.2")
 ```
 
 ### Same Gradle build (monorepo)
@@ -166,7 +166,7 @@ Please report security vulnerabilities through [GitHub private security advisori
   - change summary
   - test/verification notes
   - migration notes when APIs change
-- Tag stable releases with semantic versions **without** a `v` prefix (for example: `0.1.1`), on `main` after merging from `develop`. JitPack serves that tag to remote consumers.
+- Tag stable releases with semantic versions **without** a `v` prefix (for example: `0.1.2`), on `main` after merging from `develop`. JitPack serves that tag to remote consumers.
 
 ## License
 

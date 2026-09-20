@@ -9,7 +9,7 @@ import android.content.Context
  */
 object Security {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.0"
+  const val VERSION: String = "0.1.2"
 
   /** Default Android Keystore alias used to wrap secrets in [AndroidSecretKeyStore]. */
   const val DEFAULT_WRAP_ALIAS: String = "fk.security.wrap"

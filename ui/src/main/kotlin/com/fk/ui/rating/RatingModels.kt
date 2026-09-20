@@ -6,6 +6,14 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+/**
+ * Rating package hub — read-only and interactive star scoring with fractional steps.
+ */
+object RatingKit {
+  /** Package semantic version (keep in sync with library version when publishing). */
+  const val VERSION: String = "0.1.2"
+}
+
 /** Whether the user can change the score. */
 enum class RatingInteractionMode {
   /** Displays the current value; ignores touch and drag. */

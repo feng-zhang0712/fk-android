@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
  */
 object FlowKit {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.0"
+  const val VERSION: String = "0.1.2"
 }
 
 /**

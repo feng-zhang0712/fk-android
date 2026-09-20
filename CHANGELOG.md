@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 for library coordinates (`com.fk.android:*`). Versions in the **0.x** line may include
 breaking API changes without a major bump.
 
+## [0.1.2] - 2026-09-20
+
+### Added
+
+#### `:ui`
+
+- **`FkRating`** star rating control (`com.fk.ui.rating`) with read-only and interactive modes
+- Whole / half / custom step snapping, tap and drag selection, optional caption, haptics, and TalkBack range semantics
+- Partial fill via draw clip (correct half-star rendering); bundled star vectors; custom painter support
+- Convenience APIs: `FkRatingReadOnly`, `FkRatingInteractive`
+- Sample hub under UI → Rating covering public Rating APIs
+
+#### `:business`
+
+- Filter appearance model (`FilterAppearance`, pill styles, panel height policies, equal-width strip)
+
+### Changed
+
+- Filter tab chevron defaults to stroke chevrons (`fk_ic_chevron_down` / `_up`); removed solid triangle assets
+- Filter strip uses Surface token and normal-weight titles; panel section weights normalized
+- Sync module / package `VERSION` markers with `FK_VERSION_NAME` **0.1.2**
+
 ## [0.1.1] - 2026-09-14
 
 ### Added

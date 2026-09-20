@@ -19,7 +19,7 @@ import com.fk.core.pluggable.storage.TypedStore
  */
 object Storage {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.0"
+  const val VERSION: String = "0.1.2"
 
   /** Default Preferences DataStore file name (no extension). */
   const val DEFAULT_DATASTORE_NAME: String = "fk_storage"

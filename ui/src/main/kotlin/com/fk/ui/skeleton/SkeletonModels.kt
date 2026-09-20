@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
  */
 object Skeleton {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.0"
+  const val VERSION: String = "0.1.2"
 
   /** Default configuration (theme-derived colors applied at composition time when null). */
   val DefaultConfiguration: SkeletonConfiguration = SkeletonConfiguration()

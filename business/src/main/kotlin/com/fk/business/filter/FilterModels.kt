@@ -7,7 +7,7 @@ package com.fk.business.filter
  */
 object FilterKit {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.0"
+  const val VERSION: String = "0.1.2"
 }
 
 /** Stable identifier for filter rows, sections, and categories. */

@@ -6,10 +6,10 @@ Checklist for publishing **fk-android** so apps can install it **from a Git tag*
 
 | Context | Example |
 |---------|---------|
-| Git tag / `FK_VERSION_NAME` | `0.1.1` (no `v` prefix) |
-| JitPack (open source, recommended now) | `com.github.feng-zhang0712.fk-android:business:0.1.1` |
-| Maven Central (planned) | `com.fk.android:business:0.1.1` |
-| GitHub Packages | `com.fk.android:business:0.1.1` (auth often required to download) |
+| Git tag / `FK_VERSION_NAME` | `0.1.2` (no `v` prefix) |
+| JitPack (open source, recommended now) | `com.github.feng-zhang0712.fk-android:business:0.1.2` |
+| Maven Central (planned) | `com.fk.android:business:0.1.2` |
+| GitHub Packages | `com.fk.android:business:0.1.2` (auth often required to download) |
 
 Published modules: `core`, `ui`, `business`. `:sample` is never published.
 
@@ -32,9 +32,9 @@ JitPack builds AARs **from the GitHub tag**. You do **not** upload AARs manually
 
 ```bash
 # After release commit is on main:
-git tag -a 0.1.1 -m "Release 0.1.1"
+git tag -a 0.1.2 -m "Release 0.1.2"
 git push origin main
-git push origin 0.1.1
+git push origin 0.1.2
 ```
 
 Then open [https://jitpack.io/#feng-zhang0712/fk-android](https://jitpack.io/#feng-zhang0712/fk-android), select the tag, and wait for a green build (or let the first consumer sync trigger it).
@@ -80,9 +80,9 @@ Until that is wired, **JitPack is the supported remote install path.**
 git checkout main
 git pull origin main
 git merge develop
-git tag -a 0.1.1 -m "Release 0.1.1"
+git tag -a 0.1.2 -m "Release 0.1.2"
 git push origin main
-git push origin 0.1.1
+git push origin 0.1.2
 git checkout develop
 ```
 
