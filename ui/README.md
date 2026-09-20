@@ -7,3 +7,4 @@ Empty: `com.fk.ui.empty`. Skeleton: `com.fk.ui.skeleton`. Toast: `com.fk.ui.toas
 List: `com.fk.ui.list`. TextField: `com.fk.ui.textfield`. Sheet: `com.fk.ui.sheet`.
 Widget: `com.fk.ui.widget` (Avatar / Chip / Tag / StatusPill).
 Flow: `com.fk.ui.flow` (StepIndicator / Timeline).
+Rating: `com.fk.ui.rating` (FkRating / read-only & interactive helpers).
