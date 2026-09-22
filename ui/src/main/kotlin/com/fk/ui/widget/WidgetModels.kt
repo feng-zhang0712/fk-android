@@ -11,7 +11,7 @@ import com.fk.ui.theme.FkStatusSemantic
  */
 object WidgetKit {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.2"
+  const val VERSION: String = "0.1.3"
 }
 
 /** Avatar diameter presets (iOS `FKAvatarSize`). */

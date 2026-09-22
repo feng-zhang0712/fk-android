@@ -51,7 +51,7 @@ data class FkTheme(
     const val DefaultDarkId: String = FkThemeDefaults.DefaultDarkId
 
     /** Package semantic version (keep in sync with library version when publishing). */
-    const val VERSION: String = "0.1.2"
+    const val VERSION: String = "0.1.3"
 
     /**
      * Built-in theme using adaptive semantic colors.

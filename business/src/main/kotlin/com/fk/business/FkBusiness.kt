@@ -9,5 +9,5 @@ package com.fk.business
  */
 object FkBusiness {
   /** Library semantic version (keep in sync with `FK_VERSION_NAME`). */
-  const val VERSION: String = "0.1.2"
+  const val VERSION: String = "0.1.3"
 }

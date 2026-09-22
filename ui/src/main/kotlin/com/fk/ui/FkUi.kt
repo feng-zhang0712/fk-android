@@ -8,5 +8,5 @@ package com.fk.ui
  */
 object FkUi {
   /** Library semantic version (keep in sync with `FK_VERSION_NAME`). */
-  const val VERSION: String = "0.1.2"
+  const val VERSION: String = "0.1.3"
 }

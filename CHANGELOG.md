@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 for library coordinates (`com.fk.android:*`). Versions in the **0.x** line may include
 breaking API changes without a major bump.
 
+## [0.1.3] - 2026-09-22
+
+### Added
+
+#### `:ui`
+
+- **Callout** package (`com.fk.ui.callout`): anchored speech-bubble overlays
+- **`FkTooltip`** preset: compact dark tip, auto-dismiss, icon + message
+- **`FkPopover`** preset: title/body, header panel, footer actions, menus, coach marks, custom content
+- **`FkCallout`** advanced API: `show` / `showOrUpdate` / `update`, concurrent policy, lifecycle hooks
+- Shared layout engine: twelve placements, beak offset/styles, edge flip, keyboard avoidance
+- `CalloutHost` / `CalloutController` / `Modifier.calloutAnchor` presentation stack
+- Package README and grouped sample hub under UI → Callout
+
+### Changed
+
+- Sample catalog Core / UI / Business lists sort by title alphabetically
+- Callout enter animation uses measure-then-reveal to avoid placeholder-size position jumps
+- Sync module / package `VERSION` markers with `FK_VERSION_NAME` **0.1.3**
+
 ## [0.1.2] - 2026-09-20
 
 ### Added

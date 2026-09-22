@@ -2,7 +2,7 @@
 
 How host Android apps depend on **fk-android** from a **remote Git release** (same idea as installing an iOS package from a Git tag).
 
-Library version is `FK_VERSION_NAME` in [`gradle.properties`](../gradle.properties) (currently **0.1.2**). Git tags use the **same** string (**no `v` prefix**), e.g. `0.1.2`.
+Library version is `FK_VERSION_NAME` in [`gradle.properties`](../gradle.properties) (currently **0.1.3**). Git tags use the **same** string (**no `v` prefix**), e.g. `0.1.3`.
 
 ```text
 :business  →  :ui  →  :core
@@ -64,11 +64,11 @@ dependencyResolutionManagement {
 // app (or feature) build.gradle.kts
 dependencies {
   // Version = Git tag on https://github.com/feng-zhang0712/fk-android
-  implementation("com.github.feng-zhang0712.fk-android:business:0.1.2")
+  implementation("com.github.feng-zhang0712.fk-android:business:0.1.3")
 
   // Or layer explicitly:
-  // implementation("com.github.feng-zhang0712.fk-android:core:0.1.2")
-  // implementation("com.github.feng-zhang0712.fk-android:ui:0.1.2")
+  // implementation("com.github.feng-zhang0712.fk-android:core:0.1.3")
+  // implementation("com.github.feng-zhang0712.fk-android:ui:0.1.3")
 }
 ```
 
@@ -77,7 +77,7 @@ dependencies {
 The **first** resolve of a new tag may take a few minutes while JitPack builds from source. Check build status:
 
 - Repo lookup: [https://jitpack.io/#feng-zhang0712/fk-android](https://jitpack.io/#feng-zhang0712/fk-android)
-- Direct log (example): `https://jitpack.io/com/github/feng-zhang0712/fk-android/business/0.1.2/build.log`
+- Direct log (example): `https://jitpack.io/com/github/feng-zhang0712/fk-android/business/0.1.3/build.log`
 
 Host apps still need their own Compose / Material3 BOM. Wrap UI from `:ui` / `:business` in `FkTheme` as described in package READMEs.
 
@@ -94,7 +94,7 @@ repositories {
 }
 
 dependencies {
-  implementation("com.fk.android:business:0.1.2")
+  implementation("com.fk.android:business:0.1.3")
 }
 ```
 
@@ -119,7 +119,7 @@ maven {
 ```
 
 ```kotlin
-implementation("com.fk.android:business:0.1.2")
+implementation("com.fk.android:business:0.1.3")
 ```
 
 ---
@@ -156,7 +156,7 @@ includeBuild("../fk-android") {
 ## Versioning
 
 - **0.x** = public API may still change; pin exact versions in apps.
-- Bump `FK_VERSION_NAME`, update [CHANGELOG.md](../CHANGELOG.md), merge to `main`, tag **without** `v` (e.g. `0.1.2`).
+- Bump `FK_VERSION_NAME`, update [CHANGELOG.md](../CHANGELOG.md), merge to `main`, tag **without** `v` (e.g. `0.1.3`).
 - JitPack builds from that tag automatically on first consumer request (or when you open the JitPack page and click **Get** / **Look up**).
 
 See [releasing.md](releasing.md).

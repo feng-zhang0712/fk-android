@@ -15,7 +15,7 @@ import okhttp3.OkHttpClient
  */
 object Images {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.2"
+  const val VERSION: String = "0.1.3"
 
   /**
    * Builds the default Coil-backed [CoilImageLoader].

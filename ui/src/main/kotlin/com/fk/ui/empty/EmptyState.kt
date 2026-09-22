@@ -42,7 +42,7 @@ import com.fk.ui.theme.fkTextStyle
  */
 object Empty {
   /** Package semantic version (keep in sync with library version when publishing). */
-  const val VERSION: String = "0.1.2"
+  const val VERSION: String = "0.1.3"
 
   /** Minimum [EmptyLayout.maxContentWidth] applied when rendering (iOS clamp parity). */
   val MinContentWidth: Dp = 180.dp
