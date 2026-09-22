@@ -72,9 +72,10 @@ data class SampleDestination(
     const val TEXTFIELD = "ui/textfield"
     const val SHEET = "ui/sheet"
     const val WIDGET = "ui/widget"
-    const val FLOW = "ui/flow"
-    const val RATING = "ui/rating"
-    const val COMMENT = "business/comment"
+  const val FLOW = "ui/flow"
+  const val RATING = "ui/rating"
+  const val CALLOUT = "ui/callout"
+  const val COMMENT = "business/comment"
     const val FILTER = "business/filter"
     const val CELL = "business/cell"
   }
@@ -228,6 +229,12 @@ object SampleCatalog {
       description = "Star rating: half-step, caption, custom painters, a11y",
     ),
     SampleDestination(
+      route = SampleDestination.CALLOUT,
+      group = SampleGroup.Ui,
+      title = "Callout",
+      description = "Anchored tooltip / popover: menus, coach mark, placements",
+    ),
+    SampleDestination(
       route = SampleDestination.COMMENT,
       group = SampleGroup.Business,
       title = "Comment",
@@ -248,7 +255,9 @@ object SampleCatalog {
   )
 
   fun destinationsIn(group: SampleGroup): List<SampleDestination> =
-    destinations.filter { it.group == group }
+    destinations
+      .filter { it.group == group }
+      .sortedBy { it.title.lowercase() }
 
   fun groupOrNull(route: String): SampleGroup? =
     SampleGroup.entries.firstOrNull { it.route == route }
